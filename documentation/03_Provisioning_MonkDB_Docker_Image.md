@@ -760,9 +760,7 @@ Once the above docker run command is executed, please ensure that the spawned co
 $ docker ps
 ```
 
-If you get an output, it means MonkDB's container is running successfully. An empty output means the container has exited. Check the logs and observe the reason for exit, and make corrective actions. 
-
-A successful output usually looks like below.
+If you get an output, it means MonkDB's container is running successfully. An empty output means the container has exited. Check the logs and observe the reason for exit, and make corrective actions. A successful output usually looks like below.
 
 ```bash
 $ docker ps
