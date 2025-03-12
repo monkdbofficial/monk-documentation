@@ -1,9 +1,13 @@
 # Get Started
 
-MonkDB has a dependency on Docker engine and PSQL interface. A user must ensure they are installed
-before they run MonkDB's docker image.
+MonkDB has dependencies on Docker engine and PSQL interface. 
 
-## PSQL Installation
+Docker engine to run our docker image, and psql to create a super user in MonkDB before leveraging our SDKs. 
+
+A user must ensure they are installed before they run MonkDB's docker image.
+
+---
+## 1. PSQL Installation
 
 PSQL package must be installed (preferably using package managers). 
 
@@ -71,3 +75,8 @@ $ brew link --force libpq
 For Windows users, please use the interactive installer by [EDB](https://www.postgresql.org/download/windows/).
 
 This is the usual way of installing PostgreSQL on Windows. But to install the client only, select Command Line Tools and uncheck other options when selecting components during installation.
+
+---
+
+## 2. Docker Engine
+
