@@ -32,7 +32,7 @@ public.ecr.aws/monkdblabs/monkdblabs/monkdb   2025.3.1   9ff1cd7f2fe1   47 hours
 Now run the docker image in daemon mode/background mode. 
 
 ```bash
-$ docker run \
+$ docker run -d \
   --publish=4200:4200 \
   --publish=5432:5432 \
   --env MONKDB_HEAP_SIZE=1g \
