@@ -801,5 +801,7 @@ Release:	24.04
 Codename:	noble
 ```
 
+### Environment Specs
+
 + **Sandbox environment**: We leverage `c5.2xlarge` instance family in AWS EC2 with a *100 GiB* EBS mount. 
 + **Production environment**: We recommend `i8g` instances in AWS or equivalents in other clouds and on-premises environments for great performance.
