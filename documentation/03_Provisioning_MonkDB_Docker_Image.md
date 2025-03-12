@@ -767,6 +767,7 @@ $ docker ps
 CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                                                                                                NAMES
 30e69494c2e3   9ff1cd7f2fe1   "/docker-entrypoint.…"   6 seconds ago   Up 5 seconds   0.0.0.0:4200->4200/tcp, [::]:4200->4200/tcp, 0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp, 4300/tcp   monkdb01
 ```
+
 ---
 
 ## Creating a normal user in MonkDB
