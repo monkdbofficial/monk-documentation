@@ -1,5 +1,6 @@
 # Running MonkDB on Docker
 
+## Spawning MonkDB Container
 Create a dedicated network using the below command to manage persistence.
 
 ```bash
@@ -763,6 +764,8 @@ If the container is listed there, it means container is running successfully.
 
 ---
 
+## Creating a superuser in MonkDB
+
 Now it is time to create a normal user in the database. We must leverage this user and not the superuser in clients to connect with MonkDB.
 
 ```bash
@@ -797,3 +800,6 @@ Description:	Ubuntu 24.04.2 LTS
 Release:	24.04
 Codename:	noble
 ```
+
++ **Sandbox environment**: We leverage `c5.2xlarge` instance family in AWS EC2 with a *100 GiB* EBS mount. 
++ **Production environment**: We recommend `i8g` instances in AWS or equivalents in other clouds and on-premises environments for great performance.
