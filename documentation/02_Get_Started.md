@@ -9,11 +9,13 @@ A user must ensure they are installed before they run MonkDB's docker image.
 ---
 ## 1. PSQL Installation
 
+We want to credit **RisingWave's** [documentation](https://docs.risingwave.com/deploy/install-psql-without-postgresql) for listing out the steps to install PG drivers.
+
 PSQL package must be installed (preferably using package managers). 
 
 ### `deb` based derivatives like Debian and Ubuntu
 
-For Ubuntu and Debian systems, invoke the below commands. First update the installed packages.
+For Ubuntu and Debian systems, invoke the below commands. First update the packages which have been installed.
 
 ```bash
 $ sudo apt -y update
