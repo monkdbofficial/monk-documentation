@@ -764,7 +764,7 @@ If the container is listed there, it means container is running successfully.
 
 ---
 
-## Creating a superuser in MonkDB
+## Creating a normal user in MonkDB
 
 Now it is time to create a normal user in the database. We must leverage this user and not the superuser in clients to connect with MonkDB.
 
