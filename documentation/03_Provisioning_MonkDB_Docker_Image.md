@@ -786,7 +786,10 @@ GRANT ALL PRIVILEGES TO testuser;
 ```
 
 ---
-**PS**: We have executed all the commands listed in this document in Ubuntu with the below specifications.
+
+## Environment Related Information
+
+We have executed all the commands listed in this document in Ubuntu with the below specifications.
 
 ```bash
 $ uname -m
