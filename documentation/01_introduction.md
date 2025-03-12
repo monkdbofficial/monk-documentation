@@ -1,3 +1,6 @@
+![MonkDB](../monk_logo.png)
+
+---
 # MonkDB: A Unified, AI-Native Multi-Model Database Platform
 
 MonkDB is an advanced, versatile database platform designed to handle multiple data models seamlessly, making it an ideal solution for modern applications that require a diverse range of data storage, retrieval, and processing capabilities. With support for time series, vector, document, streaming SQL OLAP, full-text search, geospatial data, and blob stores, MonkDB empowers businesses to store and manage a variety of data types within a single, unified system.
