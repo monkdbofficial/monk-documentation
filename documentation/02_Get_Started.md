@@ -82,3 +82,9 @@ This is the usual way of installing PostgreSQL on Windows. But to install the cl
 
 ## 2. Docker Engine
 
+Use Docker's [manual](https://docs.docker.com/engine/install/) to install docker engine on the host operating system.
+
+Our docker image is tested on `AMD64` and `ARM64` platform architectures. Ensure your host operating system is compliant with these
+architectures. We are still not supporting Docker on Windows yet. However, very soon we shall be launching support for Windows as well. 
+
+Till then, as mentioned before please ensure host operating system is compliant with `ARM64` or `AMD64`. Our `AMD64` docker image also supports `x86_64` platform architecture as well.
