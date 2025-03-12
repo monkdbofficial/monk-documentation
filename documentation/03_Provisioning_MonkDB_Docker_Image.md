@@ -760,7 +760,7 @@ Once the above docker run command is executed, please ensure that the spawned co
 $ docker ps
 ```
 
-If the container is listed there, it means container is running successfully.
+If you get an output, it means MonkDB's container is running successfully. An empty output means the container has exited. Check the logs and observe the reason for exit, and make corrective actions. 
 
 ---
 
@@ -807,4 +807,4 @@ Codename:	noble
 ### Environment Specs
 
 + **Sandbox environment**: We leverage `c5.2xlarge` instance family in AWS EC2 with a *100 GiB* EBS mount. 
-+ **Production environment**: We recommend `i8g` instances in AWS or equivalents in other clouds and on-premises environments for great performance.
++ **Production environment**: We recommend `i8g` instances in AWS or equivalents in other clouds and on-premises environments for a great performance.
