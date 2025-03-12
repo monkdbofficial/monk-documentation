@@ -760,3 +760,40 @@ $ docker ps
 ```
 
 If the container is listed there, it means container is running successfully.
+
+---
+
+Now it is time to create a normal user in the database. We must leverage this user and not the superuser in clients to connect with MonkDB.
+
+```bash
+# Connect to MonkDB
+$ psql -h localhost -p 5432 -U monkdb -d monkdb
+```
+
+The below SQL statement creates a new user named `testuser` with a password `testpassword`.
+This is for illustration purposes only. You may create a username and password combo based on your organization's standards & practices. 
+```psql
+CREATE USER testuser WITH (password = 'testpassword');
+```
+
+Grant need-based/role-based privileges to the newly provisioned user.
+
+```psql
+GRANT ALL PRIVILEGES TO testuser;
+```
+
+---
+**PS**: We have executed all the commands listed in this document in Ubuntu with the below specifications.
+
+```bash
+$ uname -m
+x86_64
+```
+
+```bash
+$ lsb_release --all
+Distributor ID:	Ubuntu
+Description:	Ubuntu 24.04.2 LTS
+Release:	24.04
+Codename:	noble
+```
