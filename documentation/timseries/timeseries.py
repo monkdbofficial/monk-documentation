@@ -1,62 +1,72 @@
-import sqlalchemy as sa
-from sqlalchemy.orm import sessionmaker, declarative_base
-from sqlalchemy import Column, String, Float, TIMESTAMP
-from datetime import datetime
+from monkdb import client
 import random
+from faker import Faker
+from datetime import datetime, timedelta
 
-# Define the database URI (replace <username>, <password>, <host>, and <port> with your details)
-DB_URI = "monkdb://testuser:testpassword@172.31.30.33:4200"
+# CrateDB Connection Details
+DB_HOST = "44.222.211.123"
+DB_PORT = "4200"  # Default CrateDB port
+DB_USER = "testuser"
+DB_PASSWORD = "testpassword"
 
-# Create an SQLAlchemy engine using monk-orm
-engine = sa.create_engine(DB_URI, echo=True)
+# Create a connection
+connection = client.connect(
+    f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER)
+cursor = connection.cursor()
 
-# Create a session
-Session = sessionmaker(bind=engine)
-session = Session()
+# Faker for generating locations
+fake = Faker()
 
-# Define the base for ORM models
-Base = declarative_base()
-
-# Define the ORM model for sensor_data (matches the created table schema)
-
-
-class SensorData(Base):
-    __tablename__ = "sensor_data"
-    # Primary key for time series data
-    timestamp = Column(TIMESTAMP(timezone=True), primary_key=True)
-    location = Column(String, nullable=False)  # Location of the sensor
-    # Temperature reading in Celsius
-    temperature = Column(Float, nullable=False)
-    humidity = Column(Float, nullable=False)  # Humidity percentage
-    wind_speed = Column(Float, nullable=False)  # Wind speed in km/h
-
-# Function to insert sample data into the table
+# Generate and Insert Time-Series Data
 
 
-def insert_sample_data():
-    now = datetime.now()
-    data_points = [
-        SensorData(
-            timestamp=now,
-            location="Station A",
-            temperature=round(random.uniform(-10, 40), 2),
-            humidity=round(random.uniform(30, 90), 2),
-            wind_speed=round(random.uniform(0, 20), 2),
-        )
-        for _ in range(10)
-    ]
-    session.add_all(data_points)
-    session.commit()
+def insert_sensor_data(num_rows=10):
+    base_time = datetime.utcnow()
 
-# Function to query and display data from the table
+    for _ in range(num_rows):
+        timestamp = base_time - timedelta(minutes=random.randint(1, 1440))
+        location = fake.city()
+        temperature = round(random.uniform(10, 40), 2)
+        humidity = round(random.uniform(20, 90), 2)
+        wind_speed = round(random.uniform(0, 30), 2)
+
+        query = """
+        INSERT INTO monkdb.sensor_data (timestamp, location, temperature, humidity, wind_speed) 
+        VALUES (?, ?, ?, ?, ?)
+        """
+        cursor.execute(query, (timestamp, location,
+                       temperature, humidity, wind_speed))
+
+    connection.commit()
+    print(f"Inserted {num_rows} sensor records.")
+
+# Query Time-Series Data
 
 
-def query_data():
-    results = session.query(SensorData).all()
-    for row in results:
-        print(f"{row.timestamp}, {row.location}, {row.temperature}°C, {row.humidity}%, {row.wind_speed} km/h")
+def fetch_sensor_data():
+    query = """
+    SELECT timestamp, location, temperature, humidity, wind_speed 
+    FROM monkdb.sensor_data 
+    WHERE timestamp >= NOW() - INTERVAL '1 day'
+    ORDER BY timestamp ASC
+    """
+    cursor.execute(query)
+    rows = cursor.fetchall()
+
+    if not rows:
+        print("No recent data found.")
+        return
+
+    print("\nRecent Sensor Data (Last 24 Hours):")
+    for row in rows:
+        print(
+            f"{row[0]} | {row[1]} | Temp: {row[2]}°C | Humidity: {row[3]}% | Wind Speed: {row[4]} km/h")
 
 
-# Run the functions to demonstrate functionality
-insert_sample_data()
-query_data()
+# Run the functions
+insert_sensor_data(10)
+fetch_sensor_data()
+
+# Close connection
+cursor.close()
+connection.close()

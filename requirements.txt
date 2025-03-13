@@ -1,2 +1,3 @@
-SQLAlchemy==2.0.39
-monk-orm==1.0.1
+sqlalchemy>=2,<2.1
+monk-orm==1.0.10
+faker
