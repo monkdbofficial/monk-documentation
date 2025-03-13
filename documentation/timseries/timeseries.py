@@ -3,9 +3,9 @@ import random
 from faker import Faker
 from datetime import datetime, timedelta
 
-# CrateDB Connection Details
+# MonkDB Connection Details
 DB_HOST = "44.222.211.123"
-DB_PORT = "4200"  # Default CrateDB port
+DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity.
 DB_USER = "testuser"
 DB_PASSWORD = "testpassword"
 
