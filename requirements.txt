@@ -1,3 +1,4 @@
 sqlalchemy>=2,<2.1
+monkdb==1.0.3
 monk-orm==1.0.10
 faker

@@ -4,6 +4,7 @@ from datetime import datetime
 import random
 
 # Database connection details
+# Your instance IP address (that's reachable)
 DB_URI = "http://xx.xx.xx.xxx:4200"
 DB_USER = "testuser"
 DB_PASSWORD = "testpassword"
