@@ -81,7 +81,7 @@ Recent Sensor Data (Last 24 Hours):
 1741866569212 | Tokyo | Temp: 14.39°C | Humidity: 40.7% | Wind Speed: 1.31 km/h
 ```
 
-Next, let's run the [async](timeseries_async_data.py) version of timeseries simulation. If successful, you would keep receiving an output like below till you interrupt. Here, MonkDB is handling continuous stream of real time data from clients (hardware and software as well).
+Next, let's run the [async](timeseries_async_data.py) version of timeseries simulation. If successful, you would keep receiving an output like below till you interrupt. Here, MonkDB is handling continuous stream of real time data from clients (hardware and software as well). Here, we are also querying the data immediately after data insertion for simulation. In ideal production environment, both the processes are handled seperately (insertion and querying).
 ```zsh
 Inserted: {'timestamp': datetime.datetime(2025, 3, 13, 11, 49, 8, 27428), 'location': 'London', 'temperature': 19.46, 'humidity': 84.74, 'wind_speed': 0.83}
 Inserted: {'timestamp': datetime.datetime(2025, 3, 13, 11, 49, 8, 321124), 'location': 'Berlin', 'temperature': 23.32, 'humidity': 70.0, 'wind_speed': 15.08}
