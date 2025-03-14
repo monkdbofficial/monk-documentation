@@ -53,17 +53,25 @@ def generate_embedding(text):
     return model.encode(text).tolist()  # Convert NumPy array to list for MonkDB compatibility
 
 # ==============================
-# 5️⃣ INSERT DOCUMENTS INTO MonkDB
+# 5️⃣ INSERT DOCUMENTS INTO MONKDB
 # ==============================
 
 
-def insert_document(doc_id, text):
-    """Insert a document and its embedding into MonkDB."""
+def insert_or_update_document(doc_id, text):
+    """Insert a document into MonkDB, updating it if it already exists."""
     embedding = generate_embedding(text)
-    cursor.execute(f"""
-    INSERT INTO {DB_SCHEMA}.documents (id, content, embedding) VALUES (?, ?, ?)
-    """, [doc_id, text, embedding])
-    connection.commit()
+
+    try:
+        """Insert a document into MonkDB, updating it if it already exists."""
+        embedding = generate_embedding(text)
+        cursor.execute(f"""
+            INSERT INTO {DB_SCHEMA}.documents (id, content, embedding) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET content = excluded.content, embedding = excluded.embedding""", [doc_id, text, embedding])
+        connection.commit()
+        print(f"Upserted document: {doc_id}")
+
+    except client.exceptions.MonkIntegrityError as e:
+        print(f"⚠️ IntegrityError for doc_id {doc_id}: {str(e)}")
+        print("Skipping insertion to prevent DuplicateKeyException.")
 
 
 # Insert some sample documents
@@ -76,7 +84,7 @@ documents = [
 ]
 
 for doc_id, text in documents:
-    insert_document(doc_id, text)
+    insert_or_update_document(doc_id, text)
 
 print(f"✅ Documents inserted into {DB_SCHEMA}.documents.")
 
@@ -143,7 +151,13 @@ class MonkDBVectorStore(VectorStore):
         for doc in docs:
             embedding = generate_embedding(doc.page_content)
             self.cursor.execute(
-                f"INSERT INTO {DB_SCHEMA}.documents (id, content, embedding) VALUES (?, ?, ?)",
+                f"""
+            INSERT INTO {DB_SCHEMA}.documents (id, content, embedding) 
+            VALUES (?, ?, ?)
+            ON CONFLICT (id) DO UPDATE SET 
+                content = excluded.content, 
+                embedding = excluded.embedding
+            """,
                 [doc.metadata.get("id", "unknown"),
                  doc.page_content, embedding]
             )
@@ -178,16 +192,17 @@ class MonkDBVectorStore(VectorStore):
 
 # Working till here
 
-# # Initialize MonkDB Vector Store
-# monkdb_vector_store = MonkDBVectorStore.from_texts([
-#     "MonkDB supports fast vector search.",
-#     "Embedding-based retrieval is powerful in AI applications."
-# ])
 
-# # Perform similarity search using LangChain
-# print("\n🔍 LangChain Similarity Search Results:")
-# for doc in monkdb_vector_store.similarity_search("How does MonkDB handle vector search?"):
-#     print(doc.page_content)
+# Initialize MonkDB Vector Store
+monkdb_vector_store = MonkDBVectorStore.from_texts([
+    "MonkDB supports fast vector search.",
+    "Embedding-based retrieval is powerful in AI applications."
+])
 
-# print(
-#     f"\n✅ MonkDB vector search with Sentence Transformers & LangChain completed successfully under schema '{DB_SCHEMA}'!")
+# Perform similarity search using LangChain
+print("\n🔍 LangChain Similarity Search Results:")
+for doc in monkdb_vector_store.similarity_search("How does MonkDB handle vector search?"):
+    print(doc.page_content)
+
+print(
+    f"\n✅ MonkDB vector search with Sentence Transformers & LangChain completed successfully under schema '{DB_SCHEMA}'!")

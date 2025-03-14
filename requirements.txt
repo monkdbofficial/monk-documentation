@@ -1,6 +1,6 @@
-sqlalchemy>=2,<2.1
-monkdb==1.0.3
-monk-orm==1.0.10
+# sqlalchemy>=2,<2.1
+# monk-orm==1.0.10
+monkdb==1.0.4
 faker
 sentence_transformers
 langchain_core
