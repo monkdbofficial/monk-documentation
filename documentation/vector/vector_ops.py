@@ -190,8 +190,6 @@ class MonkDBVectorStore(VectorStore):
 
         return instance
 
-# Working till here
-
 
 # Initialize MonkDB Vector Store
 monkdb_vector_store = MonkDBVectorStore.from_texts([
