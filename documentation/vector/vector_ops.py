@@ -1,0 +1,193 @@
+import numpy as np
+from monkdb import client
+from sentence_transformers import SentenceTransformer
+from langchain_core.documents import Document
+from langchain_community.vectorstores import VectorStore
+from typing import List
+
+# ==============================
+# DATABASE CONNECTION VARIABLES
+# ==============================
+
+DB_HOST = "44.222.211.123"  # Your instance IP address
+DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity.
+DB_USER = "testuser"
+DB_PASSWORD = "testpassword"
+DB_SCHEMA = "monkdb"  # Explicit schema name
+
+# ==============================
+# 1️⃣ CONNECT TO MONKDB
+# ==============================
+connection = client.connect(
+    f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER)
+cursor = connection.cursor()
+
+# ==============================
+# 2️⃣ LOAD EMBEDDING MODEL
+# ==============================
+MODEL_NAME = "all-MiniLM-L6-v2"
+model = SentenceTransformer(MODEL_NAME)
+EMBEDDING_DIM = 384  # All-MiniLM-L6-v2 outputs 384-dimensional vectors
+
+# ==============================
+# 3️⃣ CREATE TABLE WITH FLOAT_VECTOR(384) UNDER `monkdb` SCHEMA
+# ==============================
+
+cursor.execute(f"""
+CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.documents (
+    id TEXT PRIMARY KEY,
+    content TEXT,
+    embedding FLOAT_VECTOR({EMBEDDING_DIM})
+)
+""")
+connection.commit()
+print(f"✅ Table '{DB_SCHEMA}.documents' is ready.")
+
+# ==============================
+# 4️⃣ FUNCTION TO GENERATE EMBEDDINGS
+# ==============================
+
+
+def generate_embedding(text):
+    """Generate a 384-dimensional vector for the input text."""
+    return model.encode(text).tolist()  # Convert NumPy array to list for MonkDB compatibility
+
+# ==============================
+# 5️⃣ INSERT DOCUMENTS INTO MonkDB
+# ==============================
+
+
+def insert_document(doc_id, text):
+    """Insert a document and its embedding into MonkDB."""
+    embedding = generate_embedding(text)
+    cursor.execute(f"""
+    INSERT INTO {DB_SCHEMA}.documents (id, content, embedding) VALUES (?, ?, ?)
+    """, [doc_id, text, embedding])
+    connection.commit()
+
+
+# Insert some sample documents
+documents = [
+    ("doc_1", "MonkDB is great for time-series and vector workloads."),
+    ("doc_2", "Vector search in databases is important for AI applications."),
+    ("doc_3", "MonkDB provides scalable distributed storage."),
+    ("doc_4", "Machine learning models can benefit from vector databases."),
+    ("doc_5", "AI-powered search engines rely on efficient embeddings.")
+]
+
+for doc_id, text in documents:
+    insert_document(doc_id, text)
+
+print(f"✅ Documents inserted into {DB_SCHEMA}.documents.")
+
+# ==============================
+# 6️⃣ PERFORM KNN SEARCH USING knn_match()
+# ==============================
+
+
+def knn_search(query, k=3):
+    """Find the top k nearest neighbors for a given query."""
+    query_embedding = generate_embedding(query)
+    cursor.execute(f"""
+    SELECT id, content, _score 
+    FROM {DB_SCHEMA}.documents 
+    WHERE knn_match(embedding, ?, {k})  
+    ORDER BY _score DESC
+    """, [query_embedding])
+
+    results = cursor.fetchall()
+    return results
+
+
+query_text = "Find databases optimized for vector search."
+print("\n🔍 KNN Search Results:")
+for row in knn_search(query_text):
+    print(f"ID: {row[0]}, Content: {row[1]}, Score: {row[2]}")
+
+# ==============================
+# 7️⃣ COMPUTE VECTOR SIMILARITY USING vector_similarity()
+# ==============================
+
+
+def similarity_search(query, k=3):
+    """Find similar documents using vector similarity scoring."""
+    query_embedding = generate_embedding(query)
+    cursor.execute(f"""
+    SELECT id, content, vector_similarity(embedding, ?) AS similarity 
+    FROM {DB_SCHEMA}.documents 
+    ORDER BY similarity DESC
+    LIMIT {k}
+    """, [query_embedding])
+
+    results = cursor.fetchall()
+    return results
+
+
+print("\n🔍 Similarity Search Results:")
+for row in similarity_search(query_text):
+    print(f"ID: {row[0]}, Content: {row[1]}, Similarity: {row[2]}")
+
+# ==============================
+# 8️⃣ INTEGRATE WITH LANGCHAIN
+# ==============================
+
+
+class MonkDBVectorStore(VectorStore):
+    def __init__(self, connection, embedding_dim):
+        self.connection = connection
+        self.cursor = connection.cursor()
+        self.embedding_dim = embedding_dim
+
+    def add_documents(self, docs: List[Document]):
+        """Insert documents into MonkDB with embeddings."""
+        for doc in docs:
+            embedding = generate_embedding(doc.page_content)
+            self.cursor.execute(
+                f"INSERT INTO {DB_SCHEMA}.documents (id, content, embedding) VALUES (?, ?, ?)",
+                [doc.metadata.get("id", "unknown"),
+                 doc.page_content, embedding]
+            )
+        self.connection.commit()
+
+    def similarity_search(self, query: str, k: int = 3):
+        """Find similar documents using vector similarity."""
+        query_embedding = generate_embedding(query)
+        self.cursor.execute(f"""
+        SELECT id, content, vector_similarity(embedding, ?) AS similarity 
+        FROM {DB_SCHEMA}.documents 
+        ORDER BY similarity DESC
+        LIMIT ?
+        """, [query_embedding, k])
+        results = self.cursor.fetchall()
+        return [Document(page_content=row[1], metadata={"id": row[0]}) for row in results]
+
+    @classmethod
+    def from_texts(cls, texts: List[str], metadatas: List[dict] = None):
+        """Create a vector store from a list of texts."""
+        connection = client.connect(
+            f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER)
+        instance = cls(connection, EMBEDDING_DIM)
+
+        metadatas = metadatas or [{}] * len(texts)
+
+        docs = [Document(page_content=text, metadata=meta)
+                for text, meta in zip(texts, metadatas)]
+        instance.add_documents(docs)
+
+        return instance
+
+# Working till here
+
+# # Initialize MonkDB Vector Store
+# monkdb_vector_store = MonkDBVectorStore.from_texts([
+#     "MonkDB supports fast vector search.",
+#     "Embedding-based retrieval is powerful in AI applications."
+# ])
+
+# # Perform similarity search using LangChain
+# print("\n🔍 LangChain Similarity Search Results:")
+# for doc in monkdb_vector_store.similarity_search("How does MonkDB handle vector search?"):
+#     print(doc.page_content)
+
+# print(
+#     f"\n✅ MonkDB vector search with Sentence Transformers & LangChain completed successfully under schema '{DB_SCHEMA}'!")
