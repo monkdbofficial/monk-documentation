@@ -137,16 +137,16 @@ ON CONFLICT (id) DO UPDATE SET
   - Update the existing record if id already exists.
 
 #### Execution Process:
-- Attempt to Insert a New Document `(VALUES (?, ?, ?))`
-  - `?` placeholders represent parameters passed dynamically. 
-  - If the id does not exist, a new row is inserted.
-- Handling Conflict `(ON CONFLICT (id) DO UPDATE SET)`
-  - If the id already exists, an update operation is performed. 
-  - The existing content and embedding are replaced with new values from `excluded.content` and `excluded.embedding`. 
-  - `excluded` refers to the new row that was attempted to be inserted.
-- Final Storage:
-  - If a new document was inserted, it is stored normally. 
-  - If an existing document was updated, it replaces old data.
+- **Attempt to Insert a New Document** `(VALUES (?, ?, ?))`
+    - `?` placeholders represent parameters passed dynamically.
+    - If the `id` does not exist, a new row is inserted.
+- **Handling Conflict** `(ON CONFLICT (id) DO UPDATE SET)`
+    - If the `id` already exists, an update operation is performed.
+    - The existing `content` and `embedding` are replaced with new values from `excluded.content` and `excluded.embedding`.
+    - `excluded` refers to the new row that was attempted to be inserted.
+- **Final Storage:**
+    - If a **new document** was inserted, it is stored normally.
+    - If an **existing document** was updated, it replaces old data.
 
 #### Benefits of `ON CONFLICT DO UPDATE`
 
@@ -156,4 +156,5 @@ ON CONFLICT (id) DO UPDATE SET
 
 ---
 
-**PS**: As mentioned before, an enterprise grade embedding model like `Cohere` would generate high quality embeddings that would aid in perfect outputs. This is even true for AI ML model selection. We may use an open source model on limited infra. But an org might use a better model on better infrastructure.
+**PS**: As mentioned before, an enterprise grade embedding model like `Cohere` would generate high quality embeddings that would aid in perfect outputs. This is even true for AI ML models. Enterprise grade models on production grade infra would yield high-quality results.
+For the sake of demo, we have utilized sentence transformers.
