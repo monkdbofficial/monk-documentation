@@ -9,7 +9,7 @@ from typing import List
 # DATABASE CONNECTION VARIABLES
 # ==============================
 
-DB_HOST = "44.222.211.123"  # Your instance IP address
+DB_HOST = "xx.xx.xx.xxx"  # Your instance IP address
 DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity.
 DB_USER = "testuser"
 DB_PASSWORD = "testpassword"
