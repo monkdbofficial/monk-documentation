@@ -57,7 +57,7 @@ MonkDB is great for time-series and vector workloads.
 
 ## SQL Statements utilized here
 
-### `knn_match`
+### knn_match
 
 ```psql
 SELECT id, content, _score
@@ -90,7 +90,7 @@ ORDER BY _score DESC
 - Returning the id, content, and _score:
   - Results are ordered by similarity, with most relevant documents appearing first.
 
-### `vector_similarity`
+### vector_similarity
 
 ```psql
 SELECT id, content, vector_similarity(embedding, ?) AS similarity 
