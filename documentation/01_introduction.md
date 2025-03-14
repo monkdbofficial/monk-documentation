@@ -1,4 +1,4 @@
-![MonkDB](../monk_logo.png)
+![MonkDB](../assets/monk_logo.png)
 
 ---
 # MonkDB: A Unified, AI-Native Multi-Model Database Platform

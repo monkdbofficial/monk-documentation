@@ -172,7 +172,7 @@ Inserted: {'timestamp': datetime.datetime(2025, 3, 13, 11, 49, 29, 212982), 'loc
 
 We are also attaching the output from MonkDB's terminal in tabular format.
 
-![Time series output in tabular format](../../monkdb_output_terminal.png)
+![Time series output in tabular format](../../assets/monkdb_output_terminal.png)
 
 
 A user or organization can extend these examples to production scenarios where data is fed from pipelines comprising components such as Apache Kafka, Apache Flink, and Apache Pulsar. This is mentioned because the data is assumed to be cleaned before being stored in MonkDB.
