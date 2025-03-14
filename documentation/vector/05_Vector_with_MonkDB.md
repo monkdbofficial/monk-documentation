@@ -21,7 +21,7 @@ The steps followed in the scripted simulation are:
 - We then insert documents using LangChain and ensure duplicates are not inserted by passing `ON CONFLICT DO UPDATE` argument to the SQL statement.
 - Search using LangChain
 - Initialize LangChain vector store. This creates a MonkDB vector store and inserts sample documents.
-- Retrieves similar documents using LangChain.
+- Retrieves similar documents using LangChain's retrieval mechanism.
 
 A user will receive a below output upon executing the [vector script](vector_ops.py).
 
@@ -52,3 +52,108 @@ MonkDB is great for time-series and vector workloads.
 
 ✅ MonkDB vector search with Sentence Transformers & LangChain completed successfully under schema 'monkdb'!
 ```
+
+---
+
+## SQL Statements utilized here
+
+### `knn_match`
+
+```psql
+SELECT id, content, _score
+FROM {DB_SCHEMA}.documents
+WHERE knn_match(embedding, ?, {k})  
+ORDER BY _score DESC
+```
+
+#### Explanation:
+- This performs a k-nearest neighbor (KNN) search on the embedding column, which is a `FLOAT_VECTOR(dimension)`, meaning it contains dense vector embeddings. 
+- The function knn_match(embedding, ?, {k}):
+  - `embedding` → The vector column we are searching against. 
+  - `?` → The query vector (a `FLOAT_VECTOR(dimension)` generated from the input text). 
+  - `{k}` → The number of nearest neighbors to return.
+- The `WHERE` clause `WHERE knn_match(embedding, ?, {k})`:
+  - Filters results to only include the `k most` similar vectors to the query. 
+  - Computes similarity scores using **Euclidean** distance.
+  - Returns results with a `_score` column, which represents similarity (higher score = closer match).
+- `ORDER BY _score DESC` ensures that the most similar results appear first.
+
+#### Execution Process:
+- Computing Vector Distances:
+  - The query vector is compared to all vectors stored in the embedding column. 
+  - Distance is measured using Euclidean distance (L2 norm) by default.
+- Retrieving k Nearest Neighbors:
+  - The query vector is matched with the k closest vectors.
+- Sorting by `_score`:
+  - `_score` is an internal similarity metric computed based on distance. 
+  - The closest vectors (smallest Euclidean distance) get the highest _score.
+- Returning the id, content, and _score:
+  - Results are ordered by similarity, with most relevant documents appearing first.
+
+### `vector_similarity`
+
+```psql
+SELECT id, content, vector_similarity(embedding, ?) AS similarity 
+FROM {DB_SCHEMA}.documents 
+ORDER BY similarity DESC
+LIMIT {k}
+```
+#### Explanation:
+- This computes the similarity between the stored embeddings and a query embedding. 
+- The `vector_similarity(embedding, ?)` function:
+  - `embedding` → The stored `FLOAT_VECTOR(dimensions)` column. 
+  - `?` → The query vector (input text converted into a `FLOAT_VECTOR(dimensions)`). 
+- Returns a similarity score (range `0 to 1`). 
+  - `1` → Perfect match (identical vectors). 
+  - `Closer to 0` → Distant vectors (low similarity).
+- `ORDER BY similarity DESC` ensures the most similar results come first.
+- `LIMIT {k}` restricts the output to the `top k` most relevant matches.
+
+#### Execution Process:
+- Query embedding generation (done before executing the SQL query). 
+- Computing similarity (vector_similarity()):
+  - Uses normalized Euclidean.
+  - Unlike `knn_match()`, this explicitly returns similarity values.
+- Sorting Results:
+  - Sorts in *descending* order (highest similarity first).
+- Limiting Output:
+  - Returns only the `top k` results (e.g., 3 most similar documents).
+
+### Upsert Using `ON CONFLICT DO UPDATE`
+
+```psql
+INSERT INTO {DB_SCHEMA}.documents (id, content, embedding) 
+VALUES (?, ?, ?)
+ON CONFLICT (id) DO UPDATE SET 
+    content = excluded.content, 
+    embedding = excluded.embedding
+```
+
+#### Explanation:
+- This inserts a new document or updates an existing one if a conflict occurs due to a duplicate `id`. 
+- The `id` column is a `PRIMARY KEY`, so inserting the same `id` twice would normally cause a `DuplicateKeyException`. 
+- Using `ON CONFLICT (id) DO UPDATE SET` allows us to:
+  - Insert a new record if id does not exist. 
+  - Update the existing record if id already exists.
+
+#### Execution Process:
+- Attempt to Insert a New Document `(VALUES (?, ?, ?))`
+  - `?` placeholders represent parameters passed dynamically. 
+  - If the id does not exist, a new row is inserted.
+- Handling Conflict `(ON CONFLICT (id) DO UPDATE SET)`
+  - If the id already exists, an update operation is performed. 
+  - The existing content and embedding are replaced with new values from `excluded.content` and `excluded.embedding`. 
+  - `excluded` refers to the new row that was attempted to be inserted.
+- Final Storage:
+  - If a new document was inserted, it is stored normally. 
+  - If an existing document was updated, it replaces old data.
+
+#### Benefits of `ON CONFLICT DO UPDATE`
+
+✔ Prevents duplicate key errors (`DuplicateKeyException`)  
+✔ Efficiently updates old data while allowing new inserts.  
+✔ Ensures documents stay up to date in vector storage.
+
+---
+
+**PS**: As mentioned before, an enterprise grade embedding model like `Cohere` would generate high quality embeddings that would aid in perfect outputs. This is even true for AI ML model selection. We may use an open source model on limited infra. But an org might use a better model on better infrastructure.
