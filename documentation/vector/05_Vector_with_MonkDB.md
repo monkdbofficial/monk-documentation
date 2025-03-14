@@ -1,6 +1,29 @@
+# Working with Vector Workloads Using MonkDB
 
+## Simulation
 
+In this demo, we are working with synthetic documents that would be embedded using a model and finally upserting the data into MonkDB.
 
+We are executing `knn_match` to perform **KNN** and `vector_similarity` to perform **Similarity Search** on the upserted documents.
+
+The steps followed in the scripted simulation are:
+
+- Define database connection variables. 
+- Connect to MonkDB. This creates a connection to the MonkDB instance. It opens a cursor for executing SQL queries.
+- Load `sentence-transformer` model from huggingface. You may use an alternative to sentence transformer to embed text data such as `Cohere`, `OpenAI`, etc. The model which we have used in sentence transformers leverage 384 dimensions. The quality/accuracy of those dimensions would be low when compared with models that support 2048 dimensions. Hence, as mentioned before, use embedding and infer model based on your needs.
+- Create a table in MonkDB if not already created. This will store the generated vector floats (embeddings) for downstream querying.
+- The table that we have created has `id`, `context` and `embedding` columns. You may create tables according to your need.
+- We are following the `upsert` approach. Vectors are inserted, and if it is an old document which is being inserted again, we are updating the entry. Otherwise, we would be bricked with `DuplicateKey` exception from MonkDB on data conflicts. It ensures duplicates are not inserted into the database.
+- We have added five sample documents. 
+- We are performing `knn_match` to find the top k nearest documents based on the vector embedding similarity. Here, we have utilized MonkDB's `knn_match` function.
+- Next, we are finding similar documents using MonkDB's `vector_similarity()` function, which computes Euclidean distance. **Please note that we don't support cosine similarity and dot product as on today. They are in our roadmap.**
+- In the next step, we are extending `VectorStore` class from LangChain.
+- We then insert documents using LangChain and ensure duplicates are not inserted by passing `ON CONFLICT DO UPDATE` argument to the SQL statement.
+- Search using LangChain
+- Initialize LangChain vector store. This creates a MonkDB vector store and inserts sample documents.
+- Retrieves similar documents using LangChain.
+
+A user will receive a below output upon executing the [vector script](vector_ops.py).
 
 ```zsh  
 ✅ Table 'monkdb.documents' is ready.
