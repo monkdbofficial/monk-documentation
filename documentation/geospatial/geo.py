@@ -24,9 +24,9 @@ def generate_valid_convex_polygon(num_points=4):
     return coords
 
 
-# CrateDB Connection Details
+# MonkDB Connection Details
 DB_HOST = "44.222.211.123"  # Replace with your instance IP address
-DB_PORT = "4200"  # Default CrateDB port for HTTP connectivity
+DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity
 DB_USER = "testuser"
 DB_PASSWORD = "testpassword"
 DB_SCHEMA = "monkdb"
