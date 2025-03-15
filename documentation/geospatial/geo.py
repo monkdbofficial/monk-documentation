@@ -5,6 +5,13 @@ from shapely.validation import explain_validity
 
 # Function to generate a valid convex polygon using Shapely's convex hull
 
+"""
+Creates random points within a bounded region (-50 to 50).
+Uses Shapely’s convex_hull to create a valid convex polygon.
+Prevents self-intersecting polygons that MonkDB would reject.
+Ensures all generated polygons are valid before insertion.
+"""
+
 
 def generate_valid_convex_polygon(num_points=4):
     """Generates a convex polygon using Shapely's convex hull to ensure validity."""
@@ -37,7 +44,12 @@ connection = client.connect(
 )
 cursor = connection.cursor()
 
-# Create Tables
+"""
+Creates a table (geo_points) if it doesn't exist.
+id INTEGER PRIMARY KEY → Unique identifier for each point.
+location GEO_POINT → Stores geospatial points (latitude, longitude).
+WITH (number_of_replicas = 0) → No replication (useful for development).
+"""
 cursor.execute(f"""
 CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.geo_points (
     id INTEGER PRIMARY KEY,
@@ -46,6 +58,10 @@ CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.geo_points (
 """)
 print(f"Table '{DB_SCHEMA}.geo_points' has been created.")
 
+"""
+Creates a table (geo_shapes) to store polygons.
+area GEO_SHAPE → Stores polygon geometries in GeoJSON or WKT format.
+"""
 cursor.execute(f"""
 CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.geo_shapes (
     id INTEGER PRIMARY KEY,
@@ -58,7 +74,13 @@ print(f"Table '{DB_SCHEMA}.geo_shapes' has been created.")
 num_points = 10
 num_shapes = 5
 
-# Insert GEO_POINT data
+"""
+Generates 10 random geographic points.
+Longitude range: -180 to 180
+Latitude range: -90 to 90
+Uses ? placeholders to prevent SQL injection.
+Inserts values as [lon, lat] (MonkDB's expected GEO_POINT format).
+"""
 for i in range(1, num_points + 1):
     lon, lat = round(random.uniform(-180, 180),
                      6), round(random.uniform(-90, 90), 6)
@@ -68,7 +90,11 @@ for i in range(1, num_points + 1):
     )
     print(f"Inserted point ID {i} at location [{lon}, {lat}] in {DB_SCHEMA}.")
 
-# Insert GEO_SHAPE data using WKT format
+"""
+Generates valid polygons using generate_valid_convex_polygon().
+Ensures polygons are closed.
+Inserts WKT (Well-Known Text) format, which MonkDB supports.
+"""
 for i in range(1, num_shapes + 1):
     # Generate a valid convex polygon
     coords = generate_valid_convex_polygon()
@@ -86,20 +112,24 @@ for i in range(1, num_shapes + 1):
     except Exception as e:
         print(f"Error inserting shape ID {i}: {e}")
 
-# Query Data - Fetch all points and shapes
+"""Verifies that points were inserted correctly."""
 cursor.execute(f"SELECT * FROM {DB_SCHEMA}.geo_points;")
 geo_points = cursor.fetchall()
 print("\nGeo Points:")
 for row in geo_points:
     print(row)
 
+"""Retrieves and prints all inserted polygons."""
 cursor.execute(f"SELECT * FROM {DB_SCHEMA}.geo_shapes;")
 geo_shapes = cursor.fetchall()
 print("\nGeo Shapes:")
 for row in geo_shapes:
     print(row)
 
-# Example Spatial Query - Find points within a polygon using WKT syntax
+"""
+Finds all geo_points that are inside the given polygon.
+Uses MonkDB's within() function.
+"""
 polygon_wkt = 'POLYGON ((-10 -10, 10 -10, 10 10, -10 10, -10 -10))'
 cursor.execute(
     f"""
