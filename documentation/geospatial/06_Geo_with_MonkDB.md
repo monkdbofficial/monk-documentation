@@ -114,6 +114,10 @@ id  | location
 - **Show restaurants inside a neighborhood.**  
 - **Identify nearest ATMs within a certain city block.**
 
+The below screenshot shows the `fetchall` on `geo_points` table.
+
+![GEO_POINT outputs in tabular format](../../assets/geo_points.png)
+
 ---
 
 In the [second](other_shapes.py) script, we have worked with all geometric shapes like multipoints, etc. 
@@ -151,3 +155,7 @@ Geo Shapes:
 [3, {'coordinates': [[-42.779132, -13.661547], [-25.026834, -47.707296], [4.675721, 4.099585], [47.146067, -9.784376]], 'type': 'LineString'}]
 [6, {'coordinates': [[[[14.22932, 18.483386], [-3.755172, 24.225276], [-12.810081, 29.098992], [31.051864, 43.550318], [14.22932, 18.483386]]], [[[24.78971, -49.17643], [-38.951541, -7.724923], [-41.13309, 7.343657], [49.98385, 21.368439], [24.78971, -49.17643]]]], 'type': 'MultiPolygon'}]
 ```
+
+The below screenshot shows the `fetchall` on `geo_shapes` table.
+
+![GEO_SHAPE outputs in tabular format](../../assets/geo_shapes.png)
