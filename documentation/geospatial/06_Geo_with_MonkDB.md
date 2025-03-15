@@ -1,3 +1,5 @@
+# Working with Geospatial Workloads Using MonkDB
+
 ```bash
 Let’s assume our database has the following points:
 id	location (GEO_POINT)
@@ -68,4 +70,24 @@ Geo Shapes:
 
 Points within given polygon:
 [8, [5.0062929186969995, -5.37417100276798]]
+```
+
+Other shapes.
+```bash
+Table 'monkdb.geo_shapes' has been created.
+Inserted Point with ID 1: {'type': 'Point', 'coordinates': (25.934356, 45.527155)} in monkdb.
+Inserted MultiPoint with ID 2: {'type': 'MultiPoint', 'coordinates': ((49.712241, -47.799383), (-12.233162, -42.203841), (49.97552, -14.529327))} in monkdb.
+Inserted LineString with ID 3: {'type': 'LineString', 'coordinates': ((-42.779132, -13.661547), (-25.026834, -47.707296), (4.675721, 4.099585), (47.146067, -9.784376))} in monkdb.
+Inserted MultiLineString with ID 4: {'type': 'MultiLineString', 'coordinates': (((27.031397, -44.343124), (-4.30093, -39.313672), (-41.792193, 34.945013)), ((-25.448148, -23.667061), (29.410474, -9.260572), (-19.229687, -38.890326)))} in monkdb.
+Inserted Polygon with ID 5: {'type': 'Polygon', 'coordinates': (((-8.470069, -48.434087), (-44.607494, -35.664562), (-40.190872, 10.149464), (44.014428, -5.127013), (-8.470069, -48.434087)),)} in monkdb.
+Inserted MultiPolygon with ID 6: {'type': 'MultiPolygon', 'coordinates': [(((14.22932, 18.483386), (-3.755172, 24.225276), (-12.810081, 29.098992), (31.051864, 43.550318), (14.22932, 18.483386)),), (((24.78971, -49.17643), (-38.951541, -7.724923), (-41.13309, 7.343657), (49.98385, 21.368439), (24.78971, -49.17643)),)]} in monkdb.
+Inserted GeometryCollection with ID 7: {'type': 'GeometryCollection', 'geometries': [{'type': 'Point', 'coordinates': (46.465791, 13.541019)}, {'type': 'Polygon', 'coordinates': (((-24.480335, 32.907852), (-11.719265, 38.301989), (2.556516, -3.283371), (-10.921296, -29.163324), (-24.480335, 32.907852)),)}, {'type': 'LineString', 'coordinates': ((-15.676711, -48.79382), (11.746046, 6.457466), (34.820175, 22.067799))}]} in monkdb.
+
+Geo Shapes:
+[4, {'coordinates': [[[27.031397, -44.343124], [-4.30093, -39.313672], [-41.792193, 34.945013]], [[-25.448148, -23.667061], [29.410474, -9.260572], [-19.229687, -38.890326]]], 'type': 'MultiLineString'}]
+[5, {'coordinates': [[[-8.470069, -48.434087], [-44.607494, -35.664562], [-40.190872, 10.149464], [44.014428, -5.127013], [-8.470069, -48.434087]]], 'type': 'Polygon'}]
+[1, {'coordinates': [25.934356, 45.527155], 'type': 'Point'}]
+[2, {'coordinates': [[49.712241, -47.799383], [-12.233162, -42.203841], [49.97552, -14.529327]], 'type': 'MultiPoint'}]
+[3, {'coordinates': [[-42.779132, -13.661547], [-25.026834, -47.707296], [4.675721, 4.099585], [47.146067, -9.784376]], 'type': 'LineString'}]
+[6, {'coordinates': [[[[14.22932, 18.483386], [-3.755172, 24.225276], [-12.810081, 29.098992], [31.051864, 43.550318], [14.22932, 18.483386]]], [[[24.78971, -49.17643], [-38.951541, -7.724923], [-41.13309, 7.343657], [49.98385, 21.368439], [24.78971, -49.17643]]]], 'type': 'MultiPolygon'}]
 ```

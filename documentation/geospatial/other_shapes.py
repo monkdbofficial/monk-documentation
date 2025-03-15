@@ -67,13 +67,13 @@ def generate_geo_shape(shape_type):
 
 
 # Database Connection Details
-DB_HOST = "44.222.211.123"
+DB_HOST = "xx.xx.xx.xxx"
 DB_PORT = "4200"
 DB_USER = "testuser"
 DB_PASSWORD = "testpassword"
 DB_SCHEMA = "monkdb"
 
-# Connect to CrateDB
+# Connect to MonkDB
 connection = client.connect(
     f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER
 )
