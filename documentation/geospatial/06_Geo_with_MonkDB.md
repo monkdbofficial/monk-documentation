@@ -1,4 +1,35 @@
 ```bash
+Let’s assume our database has the following points:
+id	location (GEO_POINT)
+1	[5, 5]
+2	[-8, -8]
+3	[15, 15]
+4	[-12, 5]
+Polygon Boundary
+
+(-10,-10)      (10,-10)
+     +------------+
+     |            |
+     |            |
+     +------------+
+(-10,10)        (10,10)
+
+What Happens When the Query Runs?
+id	location (GEO_POINT)	Inside Polygon?
+1	[5, 5]	✅ YES
+2	[-8, -8]	✅ YES
+3	[15, 15]	❌ NO (outside boundary)
+4	[-12, 5]	❌ NO (outside boundary)
+
+Query Result:
+
+id  | location
+---------------
+1   | [5,5]
+2   | [-8,-8]
+```
+
+```bash
 Table 'monkdb.geo_points' has been created.
 Table 'monkdb.geo_shapes' has been created.
 Inserted point ID 1 at location [-132.57216, -52.69326] in monkdb.
