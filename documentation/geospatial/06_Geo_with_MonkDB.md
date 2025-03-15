@@ -1,34 +1,29 @@
 # Working with Geospatial Workloads Using MonkDB
 
+We support efficient ingestion, storage mechanisms and querying on geospatial data. 
+
+With MonkDB, you can do the following (mentioned below):
+
+- We also support sorting or boosting scoring by distance or area prioritizes geospatial search results based on proximity or spatial relationships to enhance relevance and usability.
+- Users can filter search results using various techniques, including bounding boxes defined by longitude and latitude, circles specified by a center point and radius, donut shapes that exclude an inner circle, and custom polygons for more complex areas.
+- Index various geospatial shapes supported by MonkDB.
+
+We support `geo_point` and `geo_shape` data types. 
+
+`geo_point` store longitudes and latitudes, and `geo_shapes` store *2D shapes* defined as **GeoJSON**. We support `polygon`, `multipoint`, `line string`, `multi line string`, `multi polygon`, and `geometry collection` geometric shapes.
+
+We support *WKT strings* (Well Known Text) and array of double precision long & lats for `geo_points`. For `geo_shapes`, we support *WKT* and GeoJSON objects. 
+
+---
+
+We have simulated two scripts with synthetic data. 
+
+In the [first](geo.py) script, we have only worked on `polygon` shape. In this demo, we are inserting polygon data in WKT format, and trying to query geo_points within a geo_shape (polygon).
+
+The below is the output of the first script post its execution.
+
 ```bash
-Let’s assume our database has the following points:
-id	location (GEO_POINT)
-1	[5, 5]
-2	[-8, -8]
-3	[15, 15]
-4	[-12, 5]
-Polygon Boundary
-
-(-10,-10)      (10,-10)
-     +------------+
-     |            |
-     |            |
-     +------------+
-(-10,10)        (10,10)
-
-What Happens When the Query Runs?
-id	location (GEO_POINT)	Inside Polygon?
-1	[5, 5]	✅ YES
-2	[-8, -8]	✅ YES
-3	[15, 15]	❌ NO (outside boundary)
-4	[-12, 5]	❌ NO (outside boundary)
-
-Query Result:
-
-id  | location
----------------
-1   | [5,5]
-2   | [-8,-8]
+python3 documentation/geospatial/geo.py
 ```
 
 ```bash
@@ -72,7 +67,72 @@ Points within given polygon:
 [8, [5.0062929186969995, -5.37417100276798]]
 ```
 
-Other shapes.
+We have explained the above concept of finding points within a shape in the below section. We have tried to keep the explanation as simple as possible. 
+
+```bash
+Let’s assume our database has the following points:
+id	location (GEO_POINT)
+1	[5, 5]
+2	[-8, -8]
+3	[15, 15]
+4	[-12, 5]
+Polygon Boundary
+
+(-10,-10)      (10,-10)
+     +------------+
+     |            |
+     |            |
+     +------------+
+(-10,10)        (10,10)
+
+What Happens When the Query Runs?
+id	location (GEO_POINT)	Inside Polygon?
+1	[5, 5]	                    ✅ YES
+2	[-8, -8]	                    ✅ YES
+3	[15, 15]	                    ❌ NO (outside boundary)
+4	[-12, 5]	                    ❌ NO (outside boundary)
+
+Query Result:
+
+id  | location
+---------------
+1   | [5,5]
+2   | [-8,-8]
+```
+
+### 📌 Scenarios for Geofencing Applications, Mapping & GIS Analysis, and Location-Based Recommendations
+
+#### ✅ Geofencing Applications
+- **Identify if a user’s location is within a restricted area.**  
+  - Example: Is a taxi inside a designated pickup zone?
+
+#### ✅ Mapping & GIS Analysis
+- **Find stores within a city boundary.**  
+- **Determine earthquake-affected zones where GEO_POINT = seismic sensors.**
+
+#### ✅ Location-Based Recommendations
+- **Show restaurants inside a neighborhood.**  
+- **Identify nearest ATMs within a certain city block.**
+
+---
+
+In the [second](other_shapes.py) script, we have worked with all geometric shapes like multipoints, etc. 
+
+- **Point**: A geometric element defined by a single pair of x, y coordinates representing a specific location in space.
+- **MultiPoint**: A collection of multiple points, each defined by its own pair of x, y coordinates, used to represent several locations.
+- **LineString**: A geometric shape formed by connecting a sequence of points with straight line segments, representing linear features like roads or rivers.
+- **MultiLineString**: A collection of multiple LineStrings, allowing for the representation of several interconnected or separate linear features.
+- **Polygon**: A closed geometric shape defined by a series of points connected by straight lines, representing area features such as lakes or parks.
+- **MultiPolygon**: A collection of multiple polygons, used to represent complex areas that may consist of several distinct regions.
+- **GeometryCollection**: A collection that can contain multiple geometries of different types (points, lines, and polygons), allowing for versatile spatial representations.
+
+
+The below is output of the second script post its execution.
+
+```bash
+python3 documentation/geospatial/other_shapes.py
+```
+
 ```bash
 Table 'monkdb.geo_shapes' has been created.
 Inserted Point with ID 1: {'type': 'Point', 'coordinates': (25.934356, 45.527155)} in monkdb.

@@ -129,23 +129,6 @@ for row in geo_shapes:
 """
 Finds all geo_points that are inside the given polygon/ It checks if a GEO_POINT exists inside a GEO_SHAPE.
 Uses MonkDB's within() function.
-
-📌 When Would You Use This Query?
-
-✅ Geofencing Applications
-
-    Identify if a user’s location is within a restricted area.
-    Example: Is a taxi inside a designated pickup zone?
-
-✅ Mapping & GIS Analysis
-
-    Find stores within a city boundary.
-    Determine earthquake-affected zones where GEO_POINT = seismic sensors.
-
-✅ Location-Based Recommendations
-
-    Show restaurants inside a neighborhood.
-    Identify nearest ATMs within a certain city block.
 """
 polygon_wkt = 'POLYGON ((-10 -10, 10 -10, 10 10, -10 10, -10 -10))'
 cursor.execute(
