@@ -5,3 +5,4 @@ faker
 sentence_transformers
 langchain_core
 langchain_community
+shapely
