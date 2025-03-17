@@ -128,6 +128,53 @@ The output returns `ID`, `Title`, `Content`, and `Score` for each matching row.
 
 ---
 
+## BM25 Scoring Formula
+
+MonkDB's full-text search ranking is based on **Okapi BM25** (Best Matching 25) coupled with **Inverted Index (IVF)** data structure, which is a probabilistic ranking function. It determines the relevance of a document to a query based on term frequency, inverse document frequency, and document length normalization.
+
+The BM25 algorithm is widely used in information retrieval systems to rank documents based on their relevance to a given query. The formula for the BM25 score is as follows:
+
+$$
+\text{score}(D, Q) = \sum_{t \in Q} IDF(t) \times \frac{TF(t, D) \times (k_1 + 1)}{TF(t, D) + k_1 \times (1 - b + b \times \frac{|D|}{\text{avgD}})}
+$$
+
+Where:
+- **`TF(t, D)`** = Term Frequency (how often the search term appears in the document).
+- **`IDF(t)`** = Inverse Document Frequency (how rare the term is across all documents).
+- **`|D|`** = Document length (number of tokens in the document).
+- **`avgD`** = Average document length across all documents.
+- **`k1`** = Term saturation factor (MonkDB defaults to `1.2`).
+- **`b`** = Length normalization factor (MonkDB defaults to `0.75`).
+
+### Key Features of BM25
+
+1. **Term Frequency Saturation**:
+   - The contribution of term frequency \( \text{TF}(t, D) \) to the score grows quickly at first but slows down as it increases, approaching an asymptote.
+
+2. **Inverse Document Frequency (IDF)**:
+   - Penalizes terms that are very common across documents, as they are less informative for ranking.
+
+3. **Document Length Normalization**:
+   - Adjusts scores to prevent longer documents from being unfairly favored due to higher term frequencies.
+
+### Default Parameter Values
+- \( k_1 = 1.2 \): Controls term frequency scaling.
+- \( b = 0.75 \): Balances normalization based on document length.
+
+BM25 is highly effective because it balances simplicity and performance, making it a foundational component in many search engines and information retrieval systems.
+
+---
+
+## Other search engines using BM25
+
+- **Elasticsearch**: This popular open-source search engine uses BM25 as its default similarity algorithm for scoring and ranking search results.
+- **Apache Solr**: Solr, another open-source search platform, also implements BM25 as one of its scoring models, allowing users to leverage its capabilities for better search relevance.
+- **Microsoft Azure Cognitive Search**: This cloud-based search service uses BM25 as part of its ranking algorithms to improve search result quality.
+- **Amazon Elasticsearch Service**: This managed service, which is based on Elasticsearch, also utilizes BM25 for ranking search results.
+- **Lucene**: The underlying library for both Solr and Elasticsearch, Apache Lucene, has BM25 as one of its scoring models.
+- **Algolia**: While Algolia primarily focuses on relevance tuning and custom ranking, it incorporates principles similar to BM25 in its search algorithms.
+- **Yelp**: Yelp has been known to use BM25 in its search algorithms to rank business listings based on user queries.
+
 ## Benefits of Full-Text Search in MonkDB
 
 - ✅ Fast and Efficient – Optimized for millions of text records.
