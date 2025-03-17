@@ -134,6 +134,7 @@ MonkDB's full-text search ranking is based on **Okapi BM25** (Best Matching 25) 
 
 The BM25 algorithm is widely used in information retrieval systems to rank documents based on their relevance to a given query. The formula for the BM25 score is as follows:
 
+
 $$
 \text{score}(D, Q) = \sum_{t \in Q} IDF(t) \times \frac{TF(t, D) \times (k_1 + 1)}{TF(t, D) + k_1 \times (1 - b + b \times \frac{|D|}{\text{avgD}})}
 $$
