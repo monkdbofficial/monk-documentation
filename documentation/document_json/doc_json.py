@@ -2,7 +2,7 @@ from monkdb import client
 import json
 
 # MonkDB Connection Details
-DB_HOST = "44.222.211.123"  # Replace with your instance IP address
+DB_HOST = "xx.xx.xx.xxx"  # Replace with your instance IP address
 DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity
 DB_USER = "testuser"
 DB_PASSWORD = "testpassword"
