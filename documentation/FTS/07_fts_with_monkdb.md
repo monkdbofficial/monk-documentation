@@ -139,6 +139,7 @@ $$
 $$
 
 Where:
+
 - **`TF(t, D)`** = Term Frequency (how often the search term appears in the document).
 - **`IDF(t)`** = Inverse Document Frequency (how rare the term is across all documents).
 - **`|D|`** = Document length (number of tokens in the document).
