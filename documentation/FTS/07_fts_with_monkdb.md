@@ -179,10 +179,10 @@ BM25 is highly effective because it balances simplicity and performance, making 
 
 ## Benefits of Full-Text Search in MonkDB
 
-- ✅ Fast and Efficient – Optimized for millions of text records.
-- ✅ Smart Query Matching – Handles word variations, stemming, stop-words.
-- ✅ Relevance Ranking – Results are scored based on match strength.
-- ✅ Supports Multiple Languages – Use different analyzers for English, German, etc..
-- ✅ Ideal for AI/NLP Use Cases – Useful for chatbots, document search, semantic retrieval.
+- ✅ **Fast and Efficient** – Optimized for millions of text records.
+- ✅ **Smart Query Matching** – Handles word variations, stemming, stop-words.
+- ✅ **Relevance Ranking** – Results are scored based on match strength.
+- ✅ **Supports Multiple Languages** – Use different analyzers for English, German, etc..
+- ✅ **Ideal for AI/NLP Use Cases** – Useful for chatbots, document search, semantic retrieval.
 
 
