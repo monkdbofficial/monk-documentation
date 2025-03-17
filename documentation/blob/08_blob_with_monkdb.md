@@ -235,6 +235,12 @@ DELETE FROM blob_metadata WHERE uploaded_at < NOW() - INTERVAL '30 days';
 
 ---
 
+## Scripts
+
+For the purpose of demo and user understanding, we have run scripts that can [create a table](create_table.py) to handle blobs, and sequentially perform blob [management](blob.py) activities.
+
+---
+
 ## Outputs
 
 We are pasting screenshots of upload, download and delete BLOBs operations.
