@@ -224,13 +224,60 @@ Dropped monkdb.doc_json table
     ]
 ]
 
-✏️ Updated Alice's City to Paris!
+🔄 New Metadata Before Update:
+{
+    "skills": [
+        "Python",
+        "SQL",
+        "AI"
+    ],
+    "city": "Paris",
+    "profile": {
+        "preferences": {
+            "language": "English",
+            "food": "Italian"
+        }
+    }
+}
 
-✅ Alice's Updated City:
+✏️ Successfully Updated Alice's City to Paris!
+
+🔄 Updated Metadata After Update (Direct Fetch from Query):
+[
+    {
+        "skills": [
+            "Python",
+            "SQL",
+            "AI"
+        ],
+        "city": "Paris",
+        "profile": {
+            "preferences": {
+                "language": "English",
+                "food": "Italian"
+            }
+        }
+    }
+]
+
+✅ Alice's Updated Metadata (After Refresh):
 [
     [
         "Alice",
-        "New York"
+        {
+            "skills": [
+                "Python",
+                "SQL",
+                "AI"
+            ],
+            "city": "Paris",
+            "profile": {
+                "preferences": {
+                    "language": "English",
+                    "food": "Italian"
+                }
+            }
+        }
     ]
 ]
 

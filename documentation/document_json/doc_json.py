@@ -2,7 +2,7 @@ from monkdb import client
 import json
 
 # MonkDB Connection Details
-DB_HOST = "xx.xx.xx.xxx"  # Replace with your instance IP address
+DB_HOST = "44.222.211.123"  # Replace with your instance IP address
 DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity
 DB_USER = "testuser"
 DB_PASSWORD = "testpassword"
@@ -134,16 +134,48 @@ cursor.execute(
 print("\n🔑 JSON Keys for Each User:")
 print(json.dumps(cursor.fetchall(), indent=4))
 
-# Update JSON field (Partial JSON Update)
+# Fetch Alice's metadata
 cursor.execute(
-    f"UPDATE {DB_SCHEMA}.{TABLE_NAME} SET metadata['city'] = 'Paris' WHERE name = 'Alice'")
-print("\n✏️ Updated Alice's City to Paris!")
+    f"SELECT metadata FROM {DB_SCHEMA}.{TABLE_NAME} WHERE name = 'Alice'"
+)
+alice_metadata = cursor.fetchone()
 
-# Verify the update
+if alice_metadata:
+    alice_metadata = alice_metadata[0]  # Extract JSON object (dict)
+
+    # Modify the 'city' field
+    alice_metadata['city'] = "Paris"
+
+    # Debug: Print new metadata before updating
+    print("\n🔄 New Metadata Before Update:")
+    print(json.dumps(alice_metadata, indent=4))
+
+    # Convert modified metadata to ensure it's JSON-compatible
+    updated_metadata = json.loads(json.dumps(alice_metadata))
+
+    # ✅ Replace the entire metadata object and return the updated row
+    cursor.execute(
+        f"UPDATE {DB_SCHEMA}.{TABLE_NAME} SET metadata = ? WHERE name = 'Alice' RETURNING metadata",
+        (updated_metadata,)
+    )
+    updated_row = cursor.fetchone()  # Fetch the updated data
+    connection.commit()  # Ensure update is saved
+    print("\n✏️ Successfully Updated Alice's City to Paris!")
+
+    # Debug: Show returned metadata after update
+    print("\n🔄 Updated Metadata After Update (Direct Fetch from Query):")
+    print(json.dumps(updated_row, indent=4))
+
+# ✅ Force a REFRESH TABLE to make updates immediately visible
+cursor.execute(f"REFRESH TABLE {DB_SCHEMA}.{TABLE_NAME}")
+
+# Verify the update after refreshing
 cursor.execute(
-    f"SELECT name, metadata['city'] FROM {DB_SCHEMA}.{TABLE_NAME} WHERE name = 'Alice'")
-print("\n✅ Alice's Updated City:")
+    f"SELECT name, metadata FROM {DB_SCHEMA}.{TABLE_NAME} WHERE name = 'Alice'"
+)
+print("\n✅ Alice's Updated Metadata (After Refresh):")
 print(json.dumps(cursor.fetchall(), indent=4))
+
 
 # Close connection
 cursor.close()
