@@ -4,12 +4,12 @@
 from monkdb import client
 import requests
 
-DB_HOST = "44.222.211.123"  # Your instance IP address
+DB_HOST = "xx.xx.xx.xxx"  # Your instance IP address
 DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity.
 DB_USER = "testuser"
 DB_PASSWORD = "testpassword"
 TABLE_NAME = "blobs_demo"
-MONKDB_URL = "http://44.222.211.123:4200"
+MONKDB_URL = "http://xx.xx.xx.xxx:4200"
 
 
 def list_blobs_1():

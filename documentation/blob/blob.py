@@ -7,7 +7,7 @@ import os
 app = FastAPI()
 
 # MonkDB Configuration
-MONKDB_URL = "http://44.222.211.123:4200"
+MONKDB_URL = "http://xx.xx.xx.xxx:4200"
 TABLE_NAME = "blobs_demo"
 UPLOAD_DIR = "temp_files"  # Temporary storage for incoming files
 
