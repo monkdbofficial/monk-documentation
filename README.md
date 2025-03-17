@@ -1,4 +1,4 @@
-# Running the simulation
+# Running the simulation of MonkDB
 
 - If you are working in **MacOS** or **Linux** environments, please run [this](get-started.sh) **shell** script.
 - However, if you are working in **MS Windows** environment, please run [this](get-started.bat) **bat** script. 
