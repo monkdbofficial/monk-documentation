@@ -6,9 +6,9 @@ Below, we’ll expand on MonkDB’s BLOB functionality, its limitations, and the
 
 ---
 
-## What Are BLOBs in CrateDB?
+## What Are BLOBs in MonkDB?
 
-- BLOB (Binary Large Object) storage in CrateDB allows storing large, unstructured files.
+- BLOB (Binary Large Object) storage in MonkDB allows storing large, unstructured files.
 - It is separate from standard relational tables and does not support SQL operations like SELECT, JOIN, or WHERE filtering on BLOB content.
 - Each BLOB is identified by a SHA-1 hash of its content.
 
@@ -32,7 +32,7 @@ CLUSTERED INTO 3 SHARDS;
 
 ### 🔼 Uploading a File
 
-Since CrateDB BLOB tables do not support `INSERT` statements, you must use an HTTP API to upload files.
+Since MonkDB BLOB tables do not support `INSERT` statements, you must use an HTTP API to upload files.
 
 ```bash
 curl -X PUT "http://localhost:4200/_blobs/my_blobs/<SHA1_HASH>" --data-binary @myfile.jpg
@@ -60,7 +60,7 @@ BLOBs must be deleted by SHA-1 hash.
 
 ---
 
-## Features Missing in CrateDB BLOBs (Limitations & Workarounds)
+## Features Missing in MonkDB BLOBs (Limitations & Workarounds)
 
 ### ❌ 1. No Folder or Directory Structure
 
@@ -133,7 +133,7 @@ UPDATE blob_metadata SET filename = 'new_name.jpg' WHERE filename = 'old_name.jp
 
 ### ❌ 6. No Access Control (ACLs, Permissions)
 
-🔴 **Problem**: CrateDB BLOB storage has no built-in authentication.
+🔴 **Problem**: MonkDB BLOB storage has no built-in authentication.
 
 ✅ **Workaround**:
 
@@ -142,7 +142,7 @@ UPDATE blob_metadata SET filename = 'new_name.jpg' WHERE filename = 'old_name.jp
 
 ### ❌ 7. No Encryption of BLOBs
 
-🔴 **Problem**: CrateDB does not encrypt BLOBs at rest.
+🔴 **Problem**: MonkDB does not encrypt BLOBs at rest.
 
 ✅ **Workaround**:
 
@@ -233,7 +233,22 @@ DELETE FROM blob_metadata WHERE uploaded_at < NOW() - INTERVAL '30 days';
 | No auto-expiry          | Run a cron job for deletion           |
 
 
+---
 
+## Outputs
 
+We are pasting screenshots of upload, download and delete BLOBs operations.
 
+### Upload
 
+![Blob Upload](../../assets/blob_upload.png)
+
+### Download
+
+![Blob Download](../../assets/blob_download.png)
+
+![Blob Download Output](../../assets/blob_download_output.png)
+
+### Delete
+
+![Blob Delete](../../assets/blob_delete.png)
