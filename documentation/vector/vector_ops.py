@@ -4,23 +4,43 @@ from sentence_transformers import SentenceTransformer
 from langchain_core.documents import Document
 from langchain_community.vectorstores import VectorStore
 from typing import List
+import configparser
+import os
 
 # ==============================
 # DATABASE CONNECTION VARIABLES
 # ==============================
 
-DB_HOST = "xx.xx.xx.xxx"  # Your instance IP address
-DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity.
-DB_USER = "testuser"
-DB_PASSWORD = "testpassword"
-DB_SCHEMA = "monkdb"  # Explicit schema name
+# Determine the absolute path of the config.ini file
+# Get the directory of the current script
+current_directory = os.path.dirname(os.path.realpath(__file__))
+# Construct absolute path
+config_file_path = os.path.join(current_directory, "..", "config.ini")
+
+# Load configuration from config.ini file
+config = configparser.ConfigParser()
+config.read(config_file_path, encoding="utf-8")
+
+# MonkDB Connection Details from config file
+DB_HOST = config['database']['DB_HOST']
+DB_PORT = config['database']['DB_PORT']
+DB_USER = config['database']['DB_USER']
+DB_PASSWORD = config['database']['DB_PASSWORD']
+DB_SCHEMA = config['database']['DB_SCHEMA']
+TABLE_NAME = config['database']['VECTOR_TABLE_NAME']
 
 # ==============================
 # 1️⃣ CONNECT TO MONKDB
 # ==============================
-connection = client.connect(
-    f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER)
-cursor = connection.cursor()
+try:
+    connection = client.connect(
+        f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER
+    )
+    cursor = connection.cursor()
+    print("✅ Database connection established successfully!")
+except Exception as e:
+    print(f"⚠️ Error connecting to the database: {e}")
+    exit(1)
 
 # ==============================
 # 2️⃣ LOAD EMBEDDING MODEL
@@ -33,15 +53,19 @@ EMBEDDING_DIM = 384  # All-MiniLM-L6-v2 outputs 384-dimensional vectors
 # 3️⃣ CREATE TABLE WITH FLOAT_VECTOR(384) UNDER `monkdb` SCHEMA
 # ==============================
 
+# Drop table if exists
+cursor.execute(f"DROP TABLE IF EXISTS {DB_SCHEMA}.{TABLE_NAME}")
+print(f"Dropped {DB_SCHEMA}.{TABLE_NAME} table")
+
 cursor.execute(f"""
-CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.documents (
+CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.{TABLE_NAME} (
     id TEXT PRIMARY KEY,
     content TEXT,
     embedding FLOAT_VECTOR({EMBEDDING_DIM})
 )
 """)
 connection.commit()
-print(f"✅ Table '{DB_SCHEMA}.documents' is ready.")
+print(f"✅ Table '{DB_SCHEMA}.{TABLE_NAME}' is ready.")
 
 # ==============================
 # 4️⃣ FUNCTION TO GENERATE EMBEDDINGS
@@ -65,7 +89,7 @@ def insert_or_update_document(doc_id, text):
         """Insert a document into MonkDB, updating it if it already exists."""
         embedding = generate_embedding(text)
         cursor.execute(f"""
-            INSERT INTO {DB_SCHEMA}.documents (id, content, embedding) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET content = excluded.content, embedding = excluded.embedding""", [doc_id, text, embedding])
+            INSERT INTO {DB_SCHEMA}.{TABLE_NAME} (id, content, embedding) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET content = excluded.content, embedding = excluded.embedding""", [doc_id, text, embedding])
         connection.commit()
         print(f"Upserted document: {doc_id}")
 
@@ -86,7 +110,7 @@ documents = [
 for doc_id, text in documents:
     insert_or_update_document(doc_id, text)
 
-print(f"✅ Documents inserted into {DB_SCHEMA}.documents.")
+print(f"✅ Documents inserted into {DB_SCHEMA}.{TABLE_NAME}.")
 
 # ==============================
 # 6️⃣ PERFORM KNN SEARCH USING knn_match()
@@ -98,7 +122,7 @@ def knn_search(query, k=3):
     query_embedding = generate_embedding(query)
     cursor.execute(f"""
     SELECT id, content, _score 
-    FROM {DB_SCHEMA}.documents 
+    FROM {DB_SCHEMA}.{TABLE_NAME} 
     WHERE knn_match(embedding, ?, {k})  
     ORDER BY _score DESC
     """, [query_embedding])
@@ -122,7 +146,7 @@ def similarity_search(query, k=3):
     query_embedding = generate_embedding(query)
     cursor.execute(f"""
     SELECT id, content, vector_similarity(embedding, ?) AS similarity 
-    FROM {DB_SCHEMA}.documents 
+    FROM {DB_SCHEMA}.{TABLE_NAME} 
     ORDER BY similarity DESC
     LIMIT {k}
     """, [query_embedding])
@@ -152,7 +176,7 @@ class MonkDBVectorStore(VectorStore):
             embedding = generate_embedding(doc.page_content)
             self.cursor.execute(
                 f"""
-            INSERT INTO {DB_SCHEMA}.documents (id, content, embedding) 
+            INSERT INTO {DB_SCHEMA}.{TABLE_NAME} (id, content, embedding) 
             VALUES (?, ?, ?)
             ON CONFLICT (id) DO UPDATE SET 
                 content = excluded.content, 
@@ -168,7 +192,7 @@ class MonkDBVectorStore(VectorStore):
         query_embedding = generate_embedding(query)
         self.cursor.execute(f"""
         SELECT id, content, vector_similarity(embedding, ?) AS similarity 
-        FROM {DB_SCHEMA}.documents 
+        FROM {DB_SCHEMA}.{TABLE_NAME} 
         ORDER BY similarity DESC
         LIMIT ?
         """, [query_embedding, k])
