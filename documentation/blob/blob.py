@@ -2,14 +2,29 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 import hashlib
 import requests
 import shutil
+import configparser
 import os
 
 app = FastAPI()
 
+# Determine the absolute path of the config.ini file
+# Get the directory of the current script
+current_directory = os.path.dirname(os.path.realpath(__file__))
+# Construct absolute path
+config_file_path = os.path.join(current_directory, "..", "config.ini")
+
+# Load configuration from config.ini file
+config = configparser.ConfigParser()
+config.read(config_file_path, encoding="utf-8")
+
+# MonkDB Connection Details from config file
+DB_HOST = config['database']['DB_HOST']
+DB_PORT = config['database']['DB_PORT']
+TABLE_NAME = config['database']['BLOB_TABLE_NAME']
+UPLOAD_DIR = config['database']['UPLOAD_DIR']
+
 # MonkDB Configuration
-MONKDB_URL = "http://xx.xx.xx.xxx:4200"
-TABLE_NAME = "blobs_demo"
-UPLOAD_DIR = "temp_files"  # Temporary storage for incoming files
+MONKDB_URL = f"http://{DB_HOST}:{DB_PORT}"
 
 # Dictionary to store filename → SHA-1 mapping (Temporary, replace with DB if needed)
 file_sha1_mapping = {}
