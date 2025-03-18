@@ -21,27 +21,6 @@ DB_PASSWORD = config['database']['DB_PASSWORD']
 DB_SCHEMA = config['database']['DB_SCHEMA']
 TABLE_NAME = config['database']['DOC_TABLE_NAME']
 
-# # Debugging: Check if config file is loaded properly
-# print(f"Config file path: {config_file_path}")
-# print(f"Sections found: {config.sections()}")
-
-# # Check if 'database' section exists
-# if 'database' not in config:
-#     print("⚠️ ERROR: 'database' section is missing!")
-#     exit(1)
-
-# # Print the config values before using them
-# print(f"DB_HOST: {config.get('database', 'DB_HOST', fallback='Not Found')}")
-# print(f"DB_PORT: {config.get('database', 'DB_PORT', fallback='Not Found')}")
-# print(f"DB_USER: {config.get('database', 'DB_USER', fallback='Not Found')}")
-# print(
-#     f"DB_PASSWORD: {config.get('database', 'DB_PASSWORD', fallback='Not Found')}")
-# print(
-#     f"DB_SCHEMA: {config.get('database', 'DB_SCHEMA', fallback='Not Found')}")
-# print(
-#     f"TABLE_NAME: {config.get('database', 'DOC_TABLE_NAME', fallback='Not Found')}")
-
-
 # Create a MonkDB connection
 try:
     connection = client.connect(
