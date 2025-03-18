@@ -20,15 +20,19 @@ MonkDB is a unified database platform which supports the below workloads.
 
 Users can query using `psql`/`postgresql` **sql** statements or our query HTTP API. 
 
-We shall be releasing SDK support for other stacks as well.
+---
 
-- [![Released](https://img.shields.io/badge/Python-Released-brightgreen)](https://pypi.org/project/monkdb/)
-- ![WIP](https://img.shields.io/badge/JS%2FTS-WIP-yellow) 
-- ![TODO](https://img.shields.io/badge/Rust-TODO-lightgrey) 
-- ![TODO](https://img.shields.io/badge/Java-TODO-lightgrey) 
-- ![TODO](https://img.shields.io/badge/Golang-TODO-lightgrey) 
+## SDK Support for Different Stacks
 
-However, users can also leverage postgresql or ORM libraries of their respective stacks.
+| Language | Status     | Badge                                                                                                           | Link (if available)                                     |
+|----------|------------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| Python   | Released   | [![Released](https://img.shields.io/badge/Python-Released-brightgreen)](https://pypi.org/project/monkdb/)      | [PyPI](https://pypi.org/project/monkdb/)               |
+| JS/TS    | WIP        | ![WIP](https://img.shields.io/badge/JS%2FTS-WIP-yellow)                                                        | N/A                                                     |
+| Rust     | TODO       | ![TODO](https://img.shields.io/badge/Rust-TODO-lightgrey)                                                      | N/A                                                     |
+| Java     | TODO       | ![TODO](https://img.shields.io/badge/Java-TODO-lightgrey)                                                      | N/A                                                     |
+| Golang   | TODO       | ![TODO](https://img.shields.io/badge/Golang-TODO-lightgrey)                                                    | N/A                                                     |
+
+However, users can leverage **postgresql** or **ORM** libraries of their respective stacks as well.
 
 --- 
 
