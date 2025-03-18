@@ -1,5 +1,4 @@
 from monkdb import client
-import random
 import time
 import configparser
 import os

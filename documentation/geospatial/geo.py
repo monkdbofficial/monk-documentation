@@ -2,6 +2,8 @@ import random
 from monkdb import client
 from shapely.geometry import Polygon, MultiPoint
 from shapely.validation import explain_validity
+import configparser
+import os
 
 # Function to generate a valid convex polygon using Shapely's convex hull
 
@@ -31,18 +33,43 @@ def generate_valid_convex_polygon(num_points=4):
     return coords
 
 
-# MonkDB Connection Details
-DB_HOST = "xx.xx.xx.xxx"  # Replace with your instance IP address
-DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity
-DB_USER = "testuser"
-DB_PASSWORD = "testpassword"
-DB_SCHEMA = "monkdb"
+# Determine the absolute path of the config.ini file
+# Get the directory of the current script
+current_directory = os.path.dirname(os.path.realpath(__file__))
+# Construct absolute path
+config_file_path = os.path.join(current_directory, "..", "config.ini")
 
-# Create a connection
-connection = client.connect(
-    f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER
-)
-cursor = connection.cursor()
+# Load configuration from config.ini file
+config = configparser.ConfigParser()
+config.read(config_file_path, encoding="utf-8")
+
+# MonkDB Connection Details from config file
+DB_HOST = config['database']['DB_HOST']
+DB_PORT = config['database']['DB_PORT']
+DB_USER = config['database']['DB_USER']
+DB_PASSWORD = config['database']['DB_PASSWORD']
+DB_SCHEMA = config['database']['DB_SCHEMA']
+GEO_POINTS_TABLE = config['database']['GEO_POINTS_TABLE']
+GEO_SHAPE_TABLE = config['database']['GEO_SHAPE_TABLE']
+
+# Create a MonkDB connection
+try:
+    connection = client.connect(
+        f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER
+    )
+    cursor = connection.cursor()
+    print("✅ Database connection established successfully!")
+except Exception as e:
+    print(f"⚠️ Error connecting to the database: {e}")
+    exit(1)
+
+# Drop geo-points table if it exists
+cursor.execute(f"DROP TABLE IF EXISTS {DB_SCHEMA}.{GEO_POINTS_TABLE}")
+print(f"Dropped {DB_SCHEMA}.{GEO_POINTS_TABLE} table")
+
+# Drop geo shapes table if it exists
+cursor.execute(f"DROP TABLE IF EXISTS {DB_SCHEMA}.{GEO_SHAPE_TABLE}")
+print(f"Dropped {DB_SCHEMA}.{GEO_SHAPE_TABLE} table")
 
 """
 Creates a table (geo_points) if it doesn't exist.
@@ -51,24 +78,24 @@ location GEO_POINT → Stores geospatial points (latitude, longitude).
 WITH (number_of_replicas = 0) → No replication (useful for development).
 """
 cursor.execute(f"""
-CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.geo_points (
+CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.{GEO_POINTS_TABLE} (
     id INTEGER PRIMARY KEY,
     location GEO_POINT
 ) WITH (number_of_replicas = 0);
 """)
-print(f"Table '{DB_SCHEMA}.geo_points' has been created.")
+print(f"Table '{DB_SCHEMA}.{GEO_POINTS_TABLE}' has been created.")
 
 """
 Creates a table (geo_shapes) to store polygons.
 area GEO_SHAPE → Stores polygon geometries in GeoJSON or WKT format.
 """
 cursor.execute(f"""
-CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.geo_shapes (
+CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.{GEO_SHAPE_TABLE} (
     id INTEGER PRIMARY KEY,
     area GEO_SHAPE
 ) WITH (number_of_replicas = 0);
 """)
-print(f"Table '{DB_SCHEMA}.geo_shapes' has been created.")
+print(f"Table '{DB_SCHEMA}.{GEO_SHAPE_TABLE}' has been created.")
 
 # Insert Synthetic Data
 num_points = 10
@@ -85,7 +112,7 @@ for i in range(1, num_points + 1):
     lon, lat = round(random.uniform(-180, 180),
                      6), round(random.uniform(-90, 90), 6)
     cursor.execute(
-        f"INSERT INTO {DB_SCHEMA}.geo_points (id, location) VALUES (?, ?)",
+        f"INSERT INTO {DB_SCHEMA}.{GEO_POINTS_TABLE}(id, location) VALUES (?, ?)",
         (i, [lon, lat]),
     )
     print(f"Inserted point ID {i} at location [{lon}, {lat}] in {DB_SCHEMA}.")
@@ -105,7 +132,7 @@ for i in range(1, num_shapes + 1):
 
     try:
         cursor.execute(
-            f"INSERT INTO {DB_SCHEMA}.geo_shapes (id, area) VALUES (?, ?)",
+            f"INSERT INTO {DB_SCHEMA}.{GEO_SHAPE_TABLE} (id, area) VALUES (?, ?)",
             (i, wkt_polygon),
         )
         print(f"Inserted shape ID {i} with WKT: {wkt_polygon} in {DB_SCHEMA}.")
@@ -113,14 +140,14 @@ for i in range(1, num_shapes + 1):
         print(f"Error inserting shape ID {i}: {e}")
 
 """Verifies that points were inserted correctly."""
-cursor.execute(f"SELECT * FROM {DB_SCHEMA}.geo_points;")
+cursor.execute(f"SELECT * FROM {DB_SCHEMA}.{GEO_POINTS_TABLE};")
 geo_points = cursor.fetchall()
 print("\nGeo Points:")
 for row in geo_points:
     print(row)
 
 """Retrieves and prints all inserted polygons."""
-cursor.execute(f"SELECT * FROM {DB_SCHEMA}.geo_shapes;")
+cursor.execute(f"SELECT * FROM {DB_SCHEMA}.{GEO_SHAPE_TABLE};")
 geo_shapes = cursor.fetchall()
 print("\nGeo Shapes:")
 for row in geo_shapes:
@@ -133,7 +160,7 @@ Uses MonkDB's within() function.
 polygon_wkt = 'POLYGON ((-10 -10, 10 -10, 10 10, -10 10, -10 -10))'
 cursor.execute(
     f"""
-    SELECT id, location FROM {DB_SCHEMA}.geo_points
+    SELECT id, location FROM {DB_SCHEMA}.{GEO_POINTS_TABLE}
     WHERE within(location, ?);
 """,
     (polygon_wkt,),

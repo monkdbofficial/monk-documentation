@@ -2,6 +2,8 @@ import random
 from monkdb import client
 from shapely.geometry import Polygon, MultiPoint, LineString, MultiLineString, MultiPolygon, Point
 from shapely.ops import unary_union
+import configparser
+import os
 
 # Function to generate random points
 
@@ -66,12 +68,23 @@ def generate_geo_shape(shape_type):
     return shape.__geo_interface__  # Convert to GeoJSON-compatible format
 
 
-# Database Connection Details
-DB_HOST = "xx.xx.xx.xxx"
-DB_PORT = "4200"
-DB_USER = "testuser"
-DB_PASSWORD = "testpassword"
-DB_SCHEMA = "monkdb"
+# Determine the absolute path of the config.ini file
+# Get the directory of the current script
+current_directory = os.path.dirname(os.path.realpath(__file__))
+# Construct absolute path
+config_file_path = os.path.join(current_directory, "..", "config.ini")
+
+# Load configuration from config.ini file
+config = configparser.ConfigParser()
+config.read(config_file_path, encoding="utf-8")
+
+# MonkDB Connection Details from config file
+DB_HOST = config['database']['DB_HOST']
+DB_PORT = config['database']['DB_PORT']
+DB_USER = config['database']['DB_USER']
+DB_PASSWORD = config['database']['DB_PASSWORD']
+DB_SCHEMA = config['database']['DB_SCHEMA']
+GEO_MULTI_SHAPE_TABLE = config['database']['GEO_MULTI_SHAPE_TABLE']
 
 # Connect to MonkDB
 connection = client.connect(
@@ -79,13 +92,17 @@ connection = client.connect(
 )
 cursor = connection.cursor()
 
+# Drop geo multi shapes table if it exists
+cursor.execute(f"DROP TABLE IF EXISTS {DB_SCHEMA}.{GEO_MULTI_SHAPE_TABLE}")
+print(f"Dropped {DB_SCHEMA}.{GEO_MULTI_SHAPE_TABLE} table")
+
 cursor.execute(f"""
-CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.geo_shapes (
+CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.{GEO_MULTI_SHAPE_TABLE}(
     id INTEGER PRIMARY KEY,
     area GEO_SHAPE
 ) WITH (number_of_replicas = 0);
 """)
-print(f"Table '{DB_SCHEMA}.geo_shapes' has been created.")
+print(f"Table '{DB_SCHEMA}.{GEO_MULTI_SHAPE_TABLE}' has been created.")
 
 # Insert Synthetic Data for All GEO_SHAPE Types
 geo_shape_types = ["Point", "MultiPoint", "LineString",
@@ -95,7 +112,7 @@ for i, shape_type in enumerate(geo_shape_types, start=1):
     try:
         shape_data = generate_geo_shape(shape_type)
         cursor.execute(
-            f"INSERT INTO {DB_SCHEMA}.geo_shapes (id, area) VALUES (?, ?)",
+            f"INSERT INTO {DB_SCHEMA}.{GEO_MULTI_SHAPE_TABLE} (id, area) VALUES (?, ?)",
             (i, shape_data),
         )
         print(
@@ -107,7 +124,7 @@ for i, shape_type in enumerate(geo_shape_types, start=1):
 connection.commit()
 
 # Query Data - Fetch All Inserted Shapes
-cursor.execute(f"SELECT * FROM {DB_SCHEMA}.geo_shapes;")
+cursor.execute(f"SELECT * FROM {DB_SCHEMA}.{GEO_MULTI_SHAPE_TABLE};")
 geo_shapes = cursor.fetchall()
 print("\nGeo Shapes:")
 for row in geo_shapes:
