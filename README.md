@@ -1,4 +1,4 @@
-![MonkDB](../monkdb-documentation/assets/monk_logo.png)
+![MonkDB](./assets/monk_logo.png)
 
 # MonkDB- A Unified DB Platform
 
