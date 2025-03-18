@@ -62,7 +62,6 @@ call :run_script "documentation\geospatial\geo.py"
 call :run_script "documentation\geospatial\other_shapes.py"
 
 :: Working with timeseries
-call :run_script "documentation\timeseries\timeseries_async_data.py"
 call :run_script "documentation\timeseries\timeseries.py"
 
 :: Working with vector

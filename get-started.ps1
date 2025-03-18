@@ -75,7 +75,6 @@ Run-Script "documentation\geospatial\geo.py"
 Run-Script "documentation\geospatial\other_shapes.py"
 
 # Working with timeseries
-Run-Script "documentation\timeseries\timeseries_async_data.py"
 Run-Script "documentation\timeseries\timeseries.py"
 
 # Working with vector
