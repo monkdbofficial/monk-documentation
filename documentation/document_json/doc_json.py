@@ -1,19 +1,58 @@
 from monkdb import client
+import configparser
+import os
 import json
 
-# MonkDB Connection Details
-DB_HOST = "xx.xx.xx.xxx"  # Replace with your instance IP address
-DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity
-DB_USER = "testuser"
-DB_PASSWORD = "testpassword"
-DB_SCHEMA = "monkdb"
-TABLE_NAME = "doc_json"
+# Determine the absolute path of the config.ini file
+# Get the directory of the current script
+current_directory = os.path.dirname(os.path.realpath(__file__))
+# Construct absolute path
+config_file_path = os.path.join(current_directory, "..", "config.ini")
+
+# Load configuration from config.ini file
+config = configparser.ConfigParser()
+config.read(config_file_path, encoding="utf-8")
+
+# MonkDB Connection Details from config file
+DB_HOST = config['database']['DB_HOST']
+DB_PORT = config['database']['DB_PORT']
+DB_USER = config['database']['DB_USER']
+DB_PASSWORD = config['database']['DB_PASSWORD']
+DB_SCHEMA = config['database']['DB_SCHEMA']
+TABLE_NAME = config['database']['DOC_TABLE_NAME']
+
+# # Debugging: Check if config file is loaded properly
+# print(f"Config file path: {config_file_path}")
+# print(f"Sections found: {config.sections()}")
+
+# # Check if 'database' section exists
+# if 'database' not in config:
+#     print("⚠️ ERROR: 'database' section is missing!")
+#     exit(1)
+
+# # Print the config values before using them
+# print(f"DB_HOST: {config.get('database', 'DB_HOST', fallback='Not Found')}")
+# print(f"DB_PORT: {config.get('database', 'DB_PORT', fallback='Not Found')}")
+# print(f"DB_USER: {config.get('database', 'DB_USER', fallback='Not Found')}")
+# print(
+#     f"DB_PASSWORD: {config.get('database', 'DB_PASSWORD', fallback='Not Found')}")
+# print(
+#     f"DB_SCHEMA: {config.get('database', 'DB_SCHEMA', fallback='Not Found')}")
+# print(
+#     f"TABLE_NAME: {config.get('database', 'DOC_TABLE_NAME', fallback='Not Found')}")
+
 
 # Create a MonkDB connection
-connection = client.connect(
-    f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER
-)
-cursor = connection.cursor()
+try:
+    connection = client.connect(
+        f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER
+    )
+    cursor = connection.cursor()
+    print("✅ Database connection established successfully!")
+except Exception as e:
+    print(f"⚠️ Error connecting to the database: {e}")
+    exit(1)
+
 
 # Drop table if exists
 cursor.execute(f"DROP TABLE IF EXISTS {DB_SCHEMA}.{TABLE_NAME}")
@@ -117,7 +156,7 @@ print(json.dumps(cursor.fetchall(), indent=4))
 
 # Query Nested Object Data (Fix for NULL food preference issue)
 cursor.execute(f"""
-    SELECT name, metadata['profile']['preferences']['food'] 
+    SELECT name, metadata['profile']['preferences']['food']
     FROM {DB_SCHEMA}.{TABLE_NAME}
     WHERE metadata['profile']['preferences']['food'] IS NOT NULL
 """)
