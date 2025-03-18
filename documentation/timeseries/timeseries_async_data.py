@@ -41,7 +41,7 @@ except Exception as e:
 cursor.execute(f"DROP TABLE IF EXISTS {DB_SCHEMA}.{TABLE_NAME}")
 print(f"Dropped {DB_SCHEMA}.{TABLE_NAME} table")
 
-# Create table with JSON storage and indexing
+# Create a table
 cursor.execute(f"""
     CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.{TABLE_NAME} (
         "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL,
