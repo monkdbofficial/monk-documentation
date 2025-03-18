@@ -130,6 +130,7 @@ Finally, run our powershell script.
 - Please ensure docker engine and psql are installed & active in the spun up instance. For more information, please refer [Chapter-2](./documentation/02_Get_Started.md) in the documentation section.
   - If you prefer localhost, please ensure docker engine is installed and active. (for localhost, and solely for testing)
   - Also check if psql is installed in localhost. If not, please install it.
+  - We have added docker and psql checks in the automation script.
 - Once the docker engine is active, spin up MonkDB's docker container from its image (post `docker pull`). The instructions are mentioned in [Chapter-3](./documentation/03_Provisioning_MonkDB_Docker_Image.md). Also implement other instructions of chapter-3.
 - Replace `xx.xx.xx.xxx` in [config.ini](./documentation/config.ini) with the spun-up instance ip address. Please ensure the instance is accessible from your envionment. 
   - In your security groups or equivalents, please whitelist ports `4200`, `5432`, `HTTP`, and `HTTPS` ports mapped against your source ip address. You must be able to successfully connect & converse with the spun-up instance over these ports. If you want to login to the spun-up instance, also whitelist `SSH` port in ingress connections.
