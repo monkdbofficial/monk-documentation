@@ -16,6 +16,18 @@ function Log {
 # Start script execution
 Log "Starting script execution..."
 
+# Check if Docker and PostgreSQL (psql) are installed
+Log "Checking for Docker and PostgreSQL client..."
+if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+    Log "Error: Docker is not installed. Please install Docker and retry."
+    exit 1
+}
+if (-not (Get-Command psql -ErrorAction SilentlyContinue)) {
+    Log "Error: PostgreSQL client (psql) is not installed. Please install it and retry."
+    exit 1
+}
+Log "Docker Engine and PostgreSQL client found. Proceeding with setup."
+
 # Create a virtual environment
 Log "Creating a virtual environment..."
 python -m venv $VENV_DIR

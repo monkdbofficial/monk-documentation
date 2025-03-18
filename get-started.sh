@@ -7,9 +7,28 @@ LOG_FILE="setup_log.txt"
 
 # Function to log messages
 log() {
-    printf "%s - %s\n" "$(date '+%Y-%m-%d %H:%M:%S')" "$1" >> "$LOG_FILE"
-    printf "%s\n" "$1"
+    printf "%s - %s\n" "$(date '+%Y-%m-%d %H:%M:%S')" "$1" | tee -a "$LOG_FILE"
 }
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Detect OS type
+OS_TYPE=$(uname -s)
+
+# Check for Docker Engine and PostgreSQL (psql)
+log "Checking for Docker Engine and PostgreSQL client..."
+if ! command_exists docker; then
+    log "Error: Docker is not installed. Please install Docker and retry."
+    exit 1
+fi
+if ! command_exists psql; then
+    log "Error: PostgreSQL client (psql) is not installed. Please install it and retry."
+    exit 1
+fi
+log "Docker Engine and PostgreSQL client found. Proceeding with setup."
 
 # Create a virtual environment
 log "Creating a virtual environment..."

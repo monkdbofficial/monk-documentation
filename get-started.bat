@@ -9,6 +9,20 @@ set LOG_FILE=setup_log.txt
 :: Function to log messages
 call :log "Starting script execution..."
 
+:: Check if Docker and PostgreSQL (psql) are installed
+call :log "Checking for the presence Docker and PostgreSQL client..."
+docker --version >nul 2>&1
+if errorlevel 1 (
+    call :log "Error: Docker is not installed. Please install Docker and retry."
+    exit /b 1
+)
+psql --version >nul 2>&1
+if errorlevel 1 (
+    call :log "Error: PostgreSQL client (psql) is not installed. Please install it and retry."
+    exit /b 1
+)
+call :log "Docker Engine and PostgreSQL client found. Proceeding with setup."
+
 :: Create a virtual environment
 call :log "Creating a virtual environment..."
 python -m venv %VENV_DIR%
