@@ -1,20 +1,37 @@
 from monkdb import client
 import random
 import time
+import configparser
+import os
 
-# MonkDB Connection Details
-DB_HOST = "xx.xx.xx.xxx"  # Replace with your instance IP address
-DB_PORT = "4200"  # Default MonkDB port for HTTP connectivity
-DB_USER = "testuser"
-DB_PASSWORD = "testpassword"
-DB_SCHEMA = "monkdb"
-TABLE_NAME = "fts_demo"
+# Determine the absolute path of the config.ini file
+# Get the directory of the current script
+current_directory = os.path.dirname(os.path.realpath(__file__))
+# Construct absolute path
+config_file_path = os.path.join(current_directory, "..", "config.ini")
 
-# Create a connection
-connection = client.connect(
-    f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER
-)
-cursor = connection.cursor()
+# Load configuration from config.ini file
+config = configparser.ConfigParser()
+config.read(config_file_path, encoding="utf-8")
+
+# MonkDB Connection Details from config file
+DB_HOST = config['database']['DB_HOST']
+DB_PORT = config['database']['DB_PORT']
+DB_USER = config['database']['DB_USER']
+DB_PASSWORD = config['database']['DB_PASSWORD']
+DB_SCHEMA = config['database']['DB_SCHEMA']
+TABLE_NAME = config['database']['FTS_TABLE_NAME']
+
+# Create a MonkDB connection
+try:
+    connection = client.connect(
+        f"http://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}", username=DB_USER
+    )
+    cursor = connection.cursor()
+    print("✅ Database connection established successfully!")
+except Exception as e:
+    print(f"⚠️ Error connecting to the database: {e}")
+    exit(1)
 
 # Drop table if exists
 cursor.execute(f"DROP TABLE IF EXISTS {DB_SCHEMA}.{TABLE_NAME}")
