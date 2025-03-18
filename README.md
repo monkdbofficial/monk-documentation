@@ -18,8 +18,6 @@ MonkDB is a unified database platform which supports the below workloads.
 
 Users can query using `psql`/`postgresql` **sql** statements or our query HTTP API. 
 
-Users can also try out our SDK. It is highlighted in this [file](requirements.txt).
-
 We shall be releasing SDK support for other stacks as well.
 
 - [![Released](https://img.shields.io/badge/Python-Released-brightgreen)](https://pypi.org/project/monkdb/)
