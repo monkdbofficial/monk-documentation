@@ -4,7 +4,7 @@
 # MonkDB- A Unified DB Platform
 
 ![MonkDB Version 2025.3.1](https://img.shields.io/badge/MonkDB-Version%202025.3.1-blue) ![Stable](https://img.shields.io/badge/lifecycle-stable-brightgreen) ![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red)
- ![Kubernetes Supported](https://img.shields.io/badge/Deployment-Kubernetes%20Supported-blue) ![Docker Supported](https://img.shields.io/badge/Deployment-Docker%20Supported-blue) ![Last Updated](https://img.shields.io/badge/last%20updated-March%2018%202025-brightgreen)
+ ![Kubernetes Supported](https://img.shields.io/badge/Deployment-Kubernetes%20Supported-blue) ![Docker Supported](https://img.shields.io/badge/Deployment-Docker%20Supported-blue) ![Last Updated](https://img.shields.io/badge/last%20updated-March%2025%202025-brightgreen)
 
 
 ## Introduction
@@ -41,13 +41,13 @@ Users can query using `psql`/`postgresql` **SQL** statements or our query HTTP A
 
 ## Our SDK Support for Different Stacks
 
-| Language | Status     | Badge                                                                                                           | Link (if available)                                     |
-|----------|------------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| Python   | Released   | [![Released](https://img.shields.io/badge/Python-Released-brightgreen)](https://pypi.org/project/monkdb/)      | [PyPI](https://pypi.org/project/monkdb/)               |
-| JS/TS    | WIP        | ![WIP](https://img.shields.io/badge/JS%2FTS-WIP-yellow)                                                        | N/A                                                     |
-| Rust     | TODO       | ![TODO](https://img.shields.io/badge/Rust-TODO-lightgrey)                                                      | N/A                                                     |
-| Java     | TODO       | ![TODO](https://img.shields.io/badge/Java-TODO-lightgrey)                                                      | N/A                                                     |
-| Golang   | TODO       | ![TODO](https://img.shields.io/badge/Golang-TODO-lightgrey)                                                    | N/A                                                     |
+| Language | Status   | Badge                                                                                                     | Link (if available)                      |
+|----------|----------|-----------------------------------------------------------------------------------------------------------|------------------------------------------|
+| Python   | Released | [![Released](https://img.shields.io/badge/Python-Released-brightgreen)](https://pypi.org/project/monkdb/) | [PyPI](https://pypi.org/project/monkdb/) |
+| JS/TS    | Released | ![Released](https://img.shields.io/badge/TS-Released-brightgreen)                                         | [NPM](https://www.npmjs.com/package/@monkdb/monkdb)                                  |
+| Rust     | TODO     | ![TODO](https://img.shields.io/badge/Rust-TODO-lightgrey)                                                 | N/A                                      |
+| Java     | TODO     | ![TODO](https://img.shields.io/badge/Java-TODO-lightgrey)                                                 | N/A                                      |
+| Golang   | TODO     | ![TODO](https://img.shields.io/badge/Golang-TODO-lightgrey)                                               | N/A                                      |
 
 However, users can leverage **postgresql** or **ORM** libraries of their respective stacks as well.
 
