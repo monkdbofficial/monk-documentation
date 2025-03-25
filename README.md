@@ -44,7 +44,7 @@ Users can query using `psql`/`postgresql` **SQL** statements or our query HTTP A
 | Language | Status   | Badge                                                                                                     | Link (if available)                      |
 |----------|----------|-----------------------------------------------------------------------------------------------------------|------------------------------------------|
 | Python   | Released | [![Released](https://img.shields.io/badge/Python-Released-brightgreen)](https://pypi.org/project/monkdb/) | [PyPI](https://pypi.org/project/monkdb/) |
-| JS/TS    | Released | ![Released](https://img.shields.io/badge/TS-Released-brightgreen)                                         | [NPM](https://www.npmjs.com/package/@monkdb/monkdb)                                  |
+| JS/TS    | Released | [![Released](https://img.shields.io/badge/TS-Released-brightgreen)](https://www.npmjs.com/package/@monkdb/monkdb)                                     | [NPM](https://www.npmjs.com/package/@monkdb/monkdb)                                  |
 | Rust     | TODO     | ![TODO](https://img.shields.io/badge/Rust-TODO-lightgrey)                                                 | N/A                                      |
 | Java     | TODO     | ![TODO](https://img.shields.io/badge/Java-TODO-lightgrey)                                                 | N/A                                      |
 | Golang   | TODO     | ![TODO](https://img.shields.io/badge/Golang-TODO-lightgrey)                                               | N/A                                      |
