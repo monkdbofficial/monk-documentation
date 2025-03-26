@@ -4,7 +4,7 @@
 # MonkDB- A Unified DB Platform
 
 ![MonkDB Version 2025.3.1](https://img.shields.io/badge/MonkDB-Version%202025.3.1-blue) ![Stable](https://img.shields.io/badge/lifecycle-stable-brightgreen) ![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red)
- ![Kubernetes Supported](https://img.shields.io/badge/Deployment-Kubernetes%20Supported-blue) ![Docker Supported](https://img.shields.io/badge/Deployment-Docker%20Supported-blue) ![Last Updated](https://img.shields.io/badge/last%20updated-March%2025%202025-brightgreen)
+ ![Kubernetes Supported](https://img.shields.io/badge/Deployment-Kubernetes%20Supported-blue) ![Docker Supported](https://img.shields.io/badge/Deployment-Docker%20Supported-blue) ![Last Updated](https://img.shields.io/badge/last%20updated-March%2026%202025-brightgreen)
 
 
 ## Introduction
@@ -49,7 +49,9 @@ Users can query using `psql`/`postgresql` **SQL** statements or our query HTTP A
 | Java     | TODO     | ![TODO](https://img.shields.io/badge/Java-TODO-lightgrey)                                                 | N/A                                      |
 | Golang   | TODO     | ![TODO](https://img.shields.io/badge/Golang-TODO-lightgrey)                                               | N/A                                      |
 
-However, users can leverage **postgresql** or **ORM** libraries of their respective stacks as well.
+
+- TS/JS examples are in this [repo](https://bitbucket.org/atomstatedev/monkdb.ts/src/main/). It shows how to use our official SDK to work with MonkDB.
+- Users can leverage other **PostgreSQL** or **ORM** libraries of their respective stacks as well.
 
 --- 
 
