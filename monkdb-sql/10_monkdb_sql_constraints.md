@@ -166,6 +166,7 @@ CREATE TABLE my_table3 (
     second_column TEXT NOT NULL
 );
 ```
+---
 
 ## Additional Notes
 
