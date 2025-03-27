@@ -1,6 +1,6 @@
-# CrateDB: `ALTER CLUSTER` Statement
+# MonkDB: `ALTER CLUSTER` Statement
 
-The `ALTER CLUSTER` SQL statement in CrateDB is used to perform administrative operations on the CrateDB cluster. This includes shard rerouting, node decommissioning, swapping tables, and garbage collecting temporary artifacts.
+The `ALTER CLUSTER` SQL statement in MonkDB is used to perform administrative operations on the MonkDB cluster. This includes shard rerouting, node decommissioning, swapping tables, and garbage collecting temporary artifacts.
 
 > ⚠️ **Only superusers can execute this command.**
 
@@ -31,14 +31,14 @@ ALTER CLUSTER REROUTE RETRY FAILED;
 
 ### 2. DECOMMISSION <nodeId | nodeName>
 
-Gracefully decommissions a CrateDB node. The specified node will be removed from the cluster after relocating its data to other nodes.
+Gracefully decommissions a MonkDB node. The specified node will be removed from the cluster after relocating its data to other nodes.
 
 > 🛑 **Do not force-shutdown the node during this process.**
 
 #### ✅ Example (by node name)
 
 ```sql
-ALTER CLUSTER DECOMMISSION 'crate-data-node-1';
+ALTER CLUSTER DECOMMISSION 'monkdb-data-node-1';
 ```
 
 #### ✅ Example (by node ID)
@@ -100,7 +100,7 @@ ALTER CLUSTER GC DANGLING ARTIFACTS;
 
 ## 🔐 Permissions
 
-- Must be executed by an existing superuser in the CrateDB cluster.
+- Must be executed by an existing superuser in the MonkDB cluster.
 - Cannot be executed by standard or read-only users.
 
 ---
