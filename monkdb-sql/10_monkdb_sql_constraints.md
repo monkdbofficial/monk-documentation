@@ -1,4 +1,5 @@
-# MonkDB SQL Constraints To **Enforce Data Integrity**
+# MonkDB SQL Constraints To Enforce Data Integrity
+
 
 This chapter provides an in-depth overview of the **various constraints** supported by MonkDB, which are essential for enforcing data integrity and defining rules for the data stored within tables. Constraints in MonkDB can be categorized into two main types: **Table Constraints** and **Column Constraints**.
 
@@ -167,8 +168,10 @@ CREATE TABLE my_table3 (
 ```
 
 ## Additional Notes
+
 - **Constraint Naming**: If the `CONSTRAINT <constraint_name>` clause is omitted, MonkDB generates a unique name automatically. This name is visible in the `table_constraints` **system table** and can be used for operations like dropping the constraint.
 - **Adding Constraints to Existing Tables**: Some constraints, like `CHECK`, can be added to existing tables using the `ALTER TABLE` statement. However, adding a `PRIMARY KEY` constraint **requires** the table to be empty.
 - **Deterministic Conditions**: For `CHECK` constraints, ensure that the conditions are deterministic. Using non-deterministic expressions, such as those involving user-defined functions that can change behavior, may lead to inconsistencies.
+
 
 By effectively utilizing these constraints, you can enforce data integrity and establish robust rules for the data stored within your MonkDB tables.
