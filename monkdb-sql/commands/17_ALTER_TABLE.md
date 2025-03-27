@@ -85,7 +85,6 @@ ALTER TABLE partitioned_table PARTITION (region = 'us') SET (number_of_replicas 
   - Schema changes apply to both new and existing partitions.
 - **Constraints**:
   - Dropping columns used in keys, indices, or constraints is restricted.
-  - Renaming columns is not supported in tables created before MonkDB 5.5.
 - **Shard Management**:
   - Changing `number_of_shards` only affects future partitions.
 
