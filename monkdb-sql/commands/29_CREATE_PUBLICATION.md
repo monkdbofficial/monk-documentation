@@ -1,4 +1,4 @@
-# CREATE PUBLICATION
+# MonkDB: `CREATE PUBLICATION` Statement
 
 The `CREATE PUBLICATION` statement is used to define a new publication in the current cluster. A publication represents a group of tables whose data changes can be replicated to other clusters (subscribers) using logical replication.
 
