@@ -21,7 +21,6 @@ The `CREATE SUBSCRIPTION` statement sets up a replication connection to one or m
 ### Key Features:
 - **Replication Connection:** Establishes a connection for replicating data changes from a publisher cluster.
 - **Automatic Synchronization:** Once a subscription is enabled (default on creation), logical replication begins on the publisher.
-- **Granular Control:** You can subscribe to multiple publications from a single publisher.
 
 ---
 
@@ -31,7 +30,7 @@ The `CREATE SUBSCRIPTION` statement sets up a replication connection to one or m
 |--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **subscription_name** | The name of the new subscription. Must be unique within the cluster.                                                                                |
 | **CONNECTION 'conninfo'** | The connection string to the publisher, which is a URL in the format `monkdb://host:[port]?params`.                                                                |
-| **PUBLICATION publication_name** | The name(s) of the publication(s) on the publisher cluster to subscribe to. You can specify multiple publications separated by commas. |
+| **PUBLICATION publication_name** | The name(s) of the publication(s) on the publisher cluster to subscribe to. |
 
 ---
 
@@ -109,6 +108,37 @@ PUBLICATION my_publication;
 4. **SSL Configuration:** If using `pg_tunnel` mode with `sslmode=require`, ensure proper SSL configuration on both clusters.
 5. **Publication Existence:** The specified publications must exist on the publisher cluster.
 6. **Data Synchronization:** Data synchronization occurs automatically once the subscription is created and enabled.
+
+---
+
+## 🔐 Permissions
+
+- **Create Subscription**:
+  - Requires `AL` (Admin Level) privileges on the subscriber cluster.
+- **Connection User Requirements**:
+  - The user specified in the `conninfo` string **must** have `DQL` (read) privileges on all tables included in the publication on the publisher cluster.
+- **SSL (pg_tunnel)**:
+  - If using `pg_tunnel` mode with `sslmode=require`, ensure that proper SSL certificates are installed and trusted by both publisher and subscriber clusters.
+- **Publication Visibility**:
+  - The subscriber must have access to the publications on the publisher cluster and be authorized to read them.
+
+> 🔒 Best Practice: Create a dedicated replication user with scoped `DQL` access on the publisher for enhanced security and auditing.
+
+---
+
+## 🏁 Summary
+
+| Feature                          | Supported / Required                                               |
+|----------------------------------|--------------------------------------------------------------------|
+| Supports `sniff` Mode            | ✅ Yes (default, multi-node aware)                                |
+| Supports `pg_tunnel` Mode        | ✅ Yes (PostgreSQL protocol with single-node access)              |
+| Automatic Data Sync              | ✅ Yes (upon creation, if enabled)                                |
+| Secure Connections (SSL)         | ✅ Optional, only in `pg_tunnel` mode                             |
+| Requires Admin Privileges        | ✅ Yes (`AL`) on subscriber cluster                               |
+| Requires DQL on Publisher        | ✅ Yes, for all published tables                                  |
+| Monitors Subscription Progress   | ✅ Use system views like `sys.subscriptions` (if available)       |
+| Supports Multi-Host URIs         | ✅ Yes (in `sniff` mode)                                          |
+| Connection String Required       | ✅ Yes (must specify `user`, `password`, and host(s))             |
 
 ---
 
