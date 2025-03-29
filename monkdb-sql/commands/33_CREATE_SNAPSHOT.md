@@ -1,4 +1,4 @@
-# CREATE SNAPSHOT
+# MonkDB: `CREATE SNAPSHOT` Statement
 
 The `CREATE SNAPSHOT` statement creates a new incremental snapshot inside a repository. This snapshot captures the current state of specified tables and/or partitions, along with the cluster metadata.
 

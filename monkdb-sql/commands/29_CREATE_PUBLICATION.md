@@ -128,3 +128,8 @@ ALTER PUBLICATION my_publication ADD TABLE products, categories;
 | Replication Triggered By         | ❌ `CREATE PUBLICATION` does not start replication                    |
 | Subscriber Setup Required        | ✅ Yes, via `CREATE SUBSCRIPTION` on subscriber cluster                |
 
+---
+
+## See Also
+
+- [Create Subscription](./34_CREATE_SUBSCRIPTION.md)
