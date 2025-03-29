@@ -380,4 +380,27 @@ COPY OK, 2 records affected (1.1 seconds)
 However, upon inspecting the `errors` field in the output using `RETURN SUMMARY`, you can see that the third row wasn’t imported due to an error (e.g., invalid ID format). This output provides valuable information about how many records failed and where those errors occurred.
 
 Using this optional clause is highly recommended whenever you run your queries in MonkDB, as it helps identify and troubleshoot issues during data imports effectively.
-```
+
+## 📋 Notes
+
+- **Node Behavior**: Each node in the MonkDB cluster attempts to read the file(s) independently. Ensure the path or bucket is accessible across all nodes if you're not using the `shared = true` option.
+- **Partial Imports**: If an error occurs during import, rows already imported remain in the table. You should manually clean up partial imports if necessary.
+- **File Access**: URIs must be accessible from the database cluster. Use `file://` for local files and `s3://` for Amazon S3. It is same for Azure (`az://`)
+- **Performance**: Use the `bulk_size` and `compression` options in the `WITH` clause to optimize large imports.
+- **Format Detection**: If the file format is not explicitly defined using `WITH (format = ...)`, MonkDB attempts to infer it from the file extension or defaults to `json`.
+
+---
+
+## 🔐 Permissions
+
+- **Execution Rights**: The user must have `INSERT` privileges on the target table.
+- **Cluster Access**: The node running the import must have OS-level access to the file path (for `file://`) or S3 credentials configured (for `s3://`). It is same for Azure (`az://`)
+
+---
+
+## 🏁 Summary
+
+| Command     | Description                                         | Requires Special Permissions | Format Support | Supports Summary |
+|-------------|-----------------------------------------------------|------------------------------|----------------|------------------|
+| `COPY FROM` | Bulk-import data from files into a table            | INSERT privilege             | JSON, CSV      | ✅ Yes           |
+
