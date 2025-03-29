@@ -194,10 +194,10 @@ You can use the optional `WITH` clause to specify option values in the `COPY FRO
 ### Supported Options
 
 - **bulk_size**
-  - *Type:* integer
-  - *Default:* 10000
-  - *Optional:* Yes
-  - MonkDB processes the lines it reads from the path in bulk. This option specifies the size of each batch, and the provided value must be greater than 0.
+    - *Type:* integer
+    - *Default:* 10000
+    - *Optional:* Yes
+    - MonkDB processes the lines it reads from the path in bulk. This option specifies the size of each batch, and the provided value must be greater than 0.
 
   **Example:**
   ```sql
@@ -205,10 +205,10 @@ You can use the optional `WITH` clause to specify option values in the `COPY FRO
   ```
 
 - **fail_fast**
-  - *Type:* boolean
-  - *Default:* false
-  - *Optional:* Yes
-  - Indicates whether the `COPY FROM` operation should abort early after encountering an error. Due to distributed execution, it may continue processing some records before aborting.
+    - *Type:* boolean
+    - *Default:* false
+    - *Optional:* Yes
+    - Indicates whether the `COPY FROM` operation should abort early after encountering an error. Due to distributed execution, it may continue processing some records before aborting.
 
   **Example:**
   ```sql
@@ -216,10 +216,10 @@ You can use the optional `WITH` clause to specify option values in the `COPY FRO
   ```
 
 - **wait_for_completion**
-  - *Type:* boolean
-  - *Default:* true
-  - *Optional:* Yes
-  - Indicates if the `COPY FROM` should wait for the copy operation to complete. If set to false, the request returns immediately, and the copy operation runs in the background.
+    - *Type:* boolean
+    - *Default:* true
+    - *Optional:* Yes
+    - Indicates if the `COPY FROM` should wait for the copy operation to complete. If set to false, the request returns immediately, and the copy operation runs in the background.
 
   **Example:**
   ```sql
@@ -227,15 +227,15 @@ You can use the optional `WITH` clause to specify option values in the `COPY FRO
   ```
 
 - **shared**
-  - *Type:* boolean
-  - *Default:* Depends on the scheme of each URI.
-  - *Optional:* Yes
-  - Set to `true` if the URI location is accessible by more than one MonkDB node to prevent importing the same file multiple times.
+    - *Type:* boolean
+    - *Default:* Depends on the scheme of each URI.
+    - *Optional:* Yes
+    - Set to `true` if the URI location is accessible by more than one MonkDB node to prevent importing the same file multiple times.
 
 - **node_filters**
-  - *Type:* text
-  - *Optional:* Yes
-  - A filter expression to select nodes for executing the read operation. It takes the form:
+    - *Type:* text
+    - *Optional:* Yes
+    - A filter expression to select nodes for executing the read operation. It takes the form:
     ```json
     {
         name = '<node_name_regex>',
@@ -245,54 +245,54 @@ You can use the optional `WITH` clause to specify option values in the `COPY FRO
     Only one key is required.
 
 - **num_readers**
-  - *Type:* integer
-  - *Default:* Number of nodes available in the cluster.
-  - *Optional:* Yes
-  - Specifies how many nodes will read resources specified in the URI. The value must be greater than zero.
+    - *Type:* integer
+    - *Default:* Number of nodes available in the cluster.
+    - *Optional:* Yes
+    - Specifies how many nodes will read resources specified in the URI. The value must be greater than zero.
 
 - **compression**
-  - *Type:* text
-  - *Values:* gzip
-  - *Default:* Not compressed.
-  - *Optional:* Yes
-  - Defines whether and how exported data should be compressed.
+    - *Type:* text
+    - *Values:* gzip
+    - *Default:* Not compressed.
+    - *Optional:* Yes
+    - Defines whether and how exported data should be compressed.
 
 - **protocol**
-  - *Type:* text
-  - *Values:* http, https
-  - *Default:* https
-  - *Optional:* Yes
-  - Protocol to use, applicable for `s3` and `az` schemes only.
+    - *Type:* text
+    - *Values:* http, https
+    - *Default:* https
+    - *Optional:* Yes
+    - Protocol to use, applicable for `s3` and `az` schemes only.
 
 - **overwrite_duplicates**
-  - *Type:* boolean
-  - *Default:* false
-  - *Optional:* Yes
-  - By default, `COPY FROM` does not overwrite rows if a document with the same primary key already exists. Set to `true` to overwrite duplicate rows.
+    - *Type:* boolean
+    - *Default:* false
+    - *Optional:* Yes
+    - By default, `COPY FROM` does not overwrite rows if a document with the same primary key already exists. Set to `true` to overwrite duplicate rows.
 
 - **empty_string_as_null**
-  - *Type:* boolean
-  - *Default:* false
-  - *Optional:* Yes
-  - Converts empty strings into `NULL` when set to true. This option is only supported when using `CSV` format.
+    - *Type:* boolean
+    - *Default:* false
+    - *Optional:* Yes
+    - Converts empty strings into `NULL` when set to true. This option is only supported when using `CSV` format.
 
 - **delimiter**
-  - *Type:* text
-  - *Default:* ,
-  - *Optional:* Yes
-  - Specifies a single one-byte character that separates columns within each line of a file, applicable only for `CSV` format.
+    - *Type:* text
+    - *Default:* ,
+    - *Optional:* Yes
+    - Specifies a single one-byte character that separates columns within each line of a file, applicable only for `CSV` format.
 
 - **format**
-  - *Type:* text
-  - *Values:* csv, json
-  - *Default:* json
-  - Specifies the format of the input file. If not specified and cannot be inferred from the file extension, it will be processed as `JSON`.
+    - *Type:* text
+    - *Values:* csv, json
+    - *Default:* json
+    - Specifies the format of the input file. If not specified and cannot be inferred from the file extension, it will be processed as `JSON`.
 
 - **header**
-  - *Type:* boolean
-  - *Default:* true
-  - *Optional:* Yes
-  - Indicates if the first line of a `CSV` file contains a header with column names. If set to false, it must not contain column names in the first line.
+    - *Type:* boolean
+    - *Default:* true
+    - *Optional:* Yes
+    - Indicates if the first line of a `CSV` file contains a header with column names. If set to false, it must not contain column names in the first line.
 
 ### Example of Using Header Option:
 ```sql
@@ -300,10 +300,10 @@ COPY quotes FROM 'file:///home/import_data/comments.csv' WITH (format='csv', hea
 ```
 
 - **skip**
-   - *Type*: integer 
-   - *Default*: `0`
-   - *Optional*: Yes 
-   - Skips the first n rows while copying. If using this option to skip a header, set `header = false` as well.
+    - *Type*: integer 
+    - *Default*: `0`
+    - *Optional*: Yes 
+    - Skips the first n rows while copying. If using this option to skip a header, set `header = false` as well.
 
 ### Example:
 ```sql
@@ -311,15 +311,15 @@ COPY quotes FROM 'file:///home/import_data/comments.csv' WITH (skip=1, header=fa
 ```
 
 - **key** 
-   - *Type*: text 
-   - *Optional*: Yes 
-   - Used for az scheme only; it is required if `sas_token` is not provided.
+    - *Type*: text 
+    - *Optional*: Yes 
+    - Used for az scheme only; it is required if `sas_token` is not provided.
 
 - **sas_token** 
-   - *Type*: text 
-   - *Optional*: Yes 
-   - Used for az scheme only; provides authentication for Azure Storage accounts as an alternative to the Azure Storage Account Key. 
-   - It is required if `key` is not provided.
+    - *Type*: text 
+    - *Optional*: Yes 
+    - Used for az scheme only; provides authentication for Azure Storage accounts as an alternative to the Azure Storage Account Key. 
+    - It is required if `key` is not provided.
 
 ### RETURN SUMMARY
 
