@@ -76,3 +76,10 @@ ALTER SERVER my_postgresql OPTIONS (schema_name 'new_schema', table_name 'new_ta
 ---
 
 By using `ALTER SERVER`, administrators can dynamically manage foreign server configurations and maintain seamless access to external data sources in MonkDB.
+
+---
+
+## See Also
+
+- [Create a Server](./32_CREATE_SERVER.md)
+- [Create A Foreign Table](./27_CREATE_FOREIGN_TABLE.md)

@@ -137,4 +137,9 @@ OPTIONS (schema_name 'public', table_name 'orders');
 | Supported FDW Backends      | ✅ PostgreSQL (via JDBC FDW)                                        |
 | Permissions Required        | `CREATE` on schema, `USAGE` on server, possibly `AL` at cluster level |
 
+---
 
+## See Also:
+
+- [Create Server](./32_CREATE_SERVER.md)
+- [Alter Server](./16_ALTER_SERVER.md)
