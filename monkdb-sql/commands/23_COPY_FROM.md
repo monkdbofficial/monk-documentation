@@ -294,7 +294,7 @@ You can use the optional `WITH` clause to specify option values in the `COPY FRO
     - *Optional:* Yes
     - Indicates if the first line of a `CSV` file contains a header with column names. If set to false, it must not contain column names in the first line.
 
-### Example of Using Header Option:
+**Example of Using Header Option**:
 ```sql
 COPY quotes FROM 'file:///home/import_data/comments.csv' WITH (format='csv', header=false);
 ```
@@ -305,7 +305,7 @@ COPY quotes FROM 'file:///home/import_data/comments.csv' WITH (format='csv', hea
     - *Optional*: Yes 
     - Skips the first n rows while copying. If using this option to skip a header, set `header = false` as well.
 
-### Example:
+**Example**:
 ```sql
 COPY quotes FROM 'file:///home/import_data/comments.csv' WITH (skip=1, header=false);
 ```
