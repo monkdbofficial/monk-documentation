@@ -485,17 +485,17 @@ The highest number of threads that can be concurrently merging on a single shard
 ## 🔐 Permissions
 
 - **Create Table**:
-  - Requires the `CREATE` privilege on the schema in which the table is being created.
-  - If the schema does not exist and is being created implicitly, the user must also have `CREATE` privileges at the database level.
+    - Requires the `CREATE` privilege on the schema in which the table is being created.
+    - If the schema does not exist and is being created implicitly, the user must also have `CREATE` privileges at the database level.
 
 - **Modify Table Settings via WITH Clause**:
-  - Requires `ALTER` privileges on the table once it is created.
+    - Requires `ALTER` privileges on the table once it is created.
 
 - **Insert/Update Operations**:
-  - Require appropriate DML privileges (`INSERT`, `UPDATE`, etc.) after the table is created.
+    - Require appropriate DML privileges (`INSERT`, `UPDATE`, etc.) after the table is created.
 
 - **Ownership**:
-  - The user creating the table becomes its owner and can later grant or revoke privileges on it.
+    - The user creating the table becomes its owner and can later grant or revoke privileges on it.
 
 > 🔒 Note: Certain operations like setting cluster-level table allocation or advanced shard settings may require Admin-Level (AL) privileges depending on deployment policy.
 
