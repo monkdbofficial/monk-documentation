@@ -1,6 +1,8 @@
 # MonkDB: `CREATE TABLE` Statement
 
-The `CREATE TABLE` command create a new table in MonkDB database.
+The `CREATE TABLE` statement is used to define a new base table in MonkDB. This table stores structured data and supports a variety of options to configure its schema, indexing behavior, partitioning, sharding, and storage parameters.
+
+A table can consist of regular columns, generated columns, and optional table-level constraints. It may also be partitioned and distributed across multiple shards to support large-scale data storage and parallel query processing.
 
 ## Synopsis
 
@@ -61,6 +63,34 @@ and `table_constraint` is
   [ CONSTRAINT constraint_name ] CHECK (boolean_expression)
 }
 ```
+
+### Key Capabilities:
+
+- **Base Columns**: Standard columns defined with a data type, optional default value, and column-level constraints such as `NOT NULL`, `PRIMARY KEY`, `CHECK`, or indexing options.
+
+- **Generated Columns**: Virtual columns whose values are derived from other columns using expressions. These columns can optionally specify a data type and may also include constraints.
+
+- **Constraints**:
+  - **Primary Key**: Ensures uniqueness of the row(s) based on one or more columns.
+  - **Check Constraint**: Enforces custom boolean conditions on column values.
+  - **Nullability**: Controls whether a column can accept null values.
+  - **Indexes**: Control indexing behavior at both column and table levels, including fulltext indexing with optional analyzers.
+
+- **Partitioning**: Tables can be partitioned by one or more columns. This physically separates data into partitions based on the values in those columns, improving query performance for filtered workloads.
+
+- **Clustering**:
+  - Allows specification of a routing column to control how rows are distributed across shards.
+  - The `CLUSTERED INTO` clause defines how many shards the table should be divided into.
+
+- **Storage Options**:
+  - Per-column storage parameters can be specified using `STORAGE WITH (...)`.
+  - Table-level parameters can be provided using the `WITH (...)` clause to configure settings like the number of replicas, column policy, and more.
+
+### Execution Behavior:
+
+- If the `IF NOT EXISTS` clause is provided, MonkDB will skip creation if the table already exists, avoiding an error.
+- The `CREATE TABLE` command executes immediately and registers the table in the schema metadata. Data can be inserted into the table immediately after creation.
+
 
 The `CREATE TABLE` statement is used to establish a new table that starts off empty.
 
@@ -452,3 +482,50 @@ Indicates the maximum allowable difference between `min_shingle_size` and `max_s
 
 The highest number of threads that can be concurrently merging on a single shard is defined by default as `Math.max(1, Math.min(4, Runtime.getRuntime().availableProcessors() / 2))`. This setting is optimal for a reliable solid-state drive (SSD). However, if your index is stored on traditional hard disk drives, it is advisable to reduce this number to `1`.
 
+## 🔐 Permissions
+
+- **Create Table**:
+  - Requires the `CREATE` privilege on the schema in which the table is being created.
+  - If the schema does not exist and is being created implicitly, the user must also have `CREATE` privileges at the database level.
+
+- **Modify Table Settings via WITH Clause**:
+  - Requires `ALTER` privileges on the table once it is created.
+
+- **Insert/Update Operations**:
+  - Require appropriate DML privileges (`INSERT`, `UPDATE`, etc.) after the table is created.
+
+- **Ownership**:
+  - The user creating the table becomes its owner and can later grant or revoke privileges on it.
+
+> 🔒 Note: Certain operations like setting cluster-level table allocation or advanced shard settings may require Admin-Level (AL) privileges depending on deployment policy.
+
+---
+
+## 🏁 Summary
+
+| Feature                                | Supported / Description                                                                 |
+|----------------------------------------|------------------------------------------------------------------------------------------|
+| Base and Generated Columns             | ✅ Yes – with default values, constraints, and storage options                           |
+| Partitioning Support                   | ✅ Yes – `PARTITIONED BY` clause with restrictions                                       |
+| Sharding Control                       | ✅ Yes – via `CLUSTERED INTO ... SHARDS` and optional routing column                    |
+| Full Constraint Support                | ✅ Includes `PRIMARY KEY`, `CHECK`, `NOT NULL`, and `INDEX`                              |
+| Fulltext Indexing                      | ✅ Yes – `FULLTEXT` with optional analyzers                                              |
+| Storage Options                        | ✅ Yes – via `STORAGE WITH` at column level and `WITH` at table level                   |
+| Default Values                         | ✅ Yes (except for `OBJECT` columns)                                                     |
+| Generated Columns                      | ✅ Yes – `GENERATED ALWAYS AS`                                                           |
+| Column & Table Constraints             | ✅ Yes – including `CHECK`, `PRIMARY KEY`, and custom indexes                            |
+| Refresh Behavior                       | ✅ Controlled via `refresh_interval` and idle refresh optimizations                      |
+| Table Write Controls                   | ✅ Via `blocks.read_only`, `blocks.write`, `blocks.metadata`, etc.                       |
+| Replica Management                     | ✅ Supports `number_of_replicas`, `write.wait_for_active_shards`                        |
+| Advanced Disk & Allocation Settings    | ✅ Includes `store.type`, `routing.allocation.*`, `allocation.max_retries`, etc.         |
+| Performance Tweaks                     | ✅ Includes `codec`, `translog.*`, `merge.scheduler.max_thread_count`, etc.             |
+| Column Policy                          | ✅ Supports `strict` and `dynamic` policies                                               |
+| Requires Create Privileges             | ✅ Yes                                                                                    |
+| Schema Auto-Creation                   | ✅ Yes – if schema doesn’t exist, and privileges allow                                    |
+| Table Ownership                        | ✅ The creator becomes the owner and can manage permissions                              |
+
+--- 
+
+## See Also
+
+- [Alter Table](./17_ALTER_TABLE.md)
