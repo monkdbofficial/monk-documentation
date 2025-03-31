@@ -54,6 +54,54 @@ SERVER userserver
 OPTIONS ("user" 'myremoteuser', password '*****');
 ```
 
+## Examples
+
+1.  Mapping a Local User to a Remote User
+
+```sql
+CREATE USER MAPPING FOR local_user
+SERVER my_foreign_server
+OPTIONS ("user" 'remote_user', password 's3cr3t');
+```
+
+2. With `IF NOT EXISTS` Clause
+
+```sql
+CREATE USER MAPPING IF NOT EXISTS FOR CURRENT_USER
+SERVER my_foreign_server
+OPTIONS ("user" 'remote_user', password 'mypassword');
+```
+
+This creates a mapping only if it doesn't already exist, using the currently logged-in user and the specified credentials for the foreign server.
+
+3. Using Built-in Role Keywords
+
+```sql
+CREATE USER MAPPING FOR CURRENT_ROLE
+SERVER hr_data_server
+OPTIONS ("user" 'hr_readonly', password 'readonlypass');
+```
+
+This is equivalent to using `CURRENT_USER`, mapping the currently active session role to a remote identity.
+
+4. Dynamic Mapping for Integration via JDBC Wrapper
+
+Assume you’re connecting to a JDBC-compatible external system (PostgreSQL):
+
+```sql
+CREATE USER MAPPING FOR reporting_user
+SERVER analytics_jdbc_server
+OPTIONS (
+    "user" 'analytics_reader',
+    password 'securepass123',
+    "jdbc.driver" 'org.postgresql.Driver',
+    "jdbc.url" 'jdbc:postgresql://remotehost:5432/analyticsdb'
+);
+```
+
+This shows how wrapper-specific options (like jdbc.driver, jdbc.url) can be used along with credentials.
+
+---
 ## 🔐 Permissions
 
 - **Creating a User Mapping**:
