@@ -117,6 +117,37 @@ This creates the `top_customers` table within the `analytics` schema.
 
 ---
 
+## 🔐 Permissions
+
+- **Creating the Target Table**:
+  - Requires `CREATE` privilege on the target schema where the new table will be created.
+
+- **Query Source Access**:
+  - Requires `DQL` (Data Query Language) privileges on all source tables used in the query.
+
+- **Schema Qualification**:
+  - If a specific schema is referenced, the user must have appropriate access to that schema.
+
+> 🔒 Note: While the `CREATE TABLE AS` operation uses results from a query, it does not automatically grant any additional privileges on the new table to others—explicit `GRANT` statements must follow if shared access is needed.
+
+---
+
+## 🏁 Summary
+
+| Feature                        | Supported / Required                                               |
+|--------------------------------|--------------------------------------------------------------------|
+| Creates New Table              | ✅ Yes                                                             |
+| Populates Data from Query      | ✅ Yes                                                             |
+| Schema Inference from Query    | ✅ Yes (column names and types from `SELECT`)                     |
+| IF NOT EXISTS Support          | ✅ Yes                                                             |
+| Supports Aggregations/Subqueries | ✅ Yes                                                          |
+| Data Snapshot at Execution     | ✅ One-time snapshot, no sync with source                          |
+| Requires CREATE Privilege      | ✅ On target schema                                                |
+| Requires DQL Privilege         | ✅ On all source tables in the query                               |
+| Additional Clauses (e.g., WITH, CLUSTERED) | ❌ Not currently supported — defaults are applied            |
+
+---
+
 ## See Also
 
 - [Create Table](./35_CREATE_TABLE.md)
