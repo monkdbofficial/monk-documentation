@@ -372,4 +372,8 @@ CREATE REPOSITORY remote_fs_repo TYPE url
 WITH (url = 'http://example.com/monkdb-snapshots');
 ```
 
+---
 
+## See Also
+
+- [Drop repository](./49_DROP_REPOSITORY.md)
