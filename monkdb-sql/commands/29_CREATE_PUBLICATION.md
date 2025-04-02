@@ -133,3 +133,4 @@ ALTER PUBLICATION my_publication ADD TABLE products, categories;
 ## See Also
 
 - [Create Subscription](./34_CREATE_SUBSCRIPTION.md)
+- [Drop publication](./48_DROP_PUBLICATION.md)
