@@ -136,3 +136,8 @@ In this example, both functions can be called using the same name, but they will
 | Schema Scope                | ✅ Functions are defined within a schema                            |
 | External Language Support   | ⚠️ Depends on MonkDB configuration (e.g., JavaScript)              |
 
+---
+
+## See Also
+
+- [Drop a function](./47_DROP_FUNCTION.md)
