@@ -225,3 +225,8 @@ Commonly used components for reference:
 | Requires DDL Privilege        | ✅ Yes                                     |
 | Global Scope                  | ✅ Yes (cluster-wide availability)         |
 
+---
+
+## See Also
+
+- [Drop an analyzer](./45_DROP_ANALYSER.md)
