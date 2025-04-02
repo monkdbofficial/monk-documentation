@@ -1,4 +1,4 @@
-# CREATE VIEW
+# MonkDB: `CREATE VIEW` Statement
 
 The `CREATE VIEW` statement is used to define a named query that can be referenced in other SQL statements. Views are not materialized; instead, the query is executed every time the view is referenced.
 
