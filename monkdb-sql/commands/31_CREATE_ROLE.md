@@ -125,3 +125,8 @@ These roles can then be granted specific privileges and assigned to relevant use
 | Default Privileges         | ❌ None — must be granted explicitly                     |
 | Droppable                  | ✅ Yes (via `DROP ROLE`)                                  |
 
+---
+
+## See Also
+
+- [Drop role](./50_DROP_ROLE.md)
