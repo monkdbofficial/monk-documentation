@@ -143,3 +143,4 @@ OPTIONS (schema_name 'public', table_name 'orders');
 
 - [Create Server](./32_CREATE_SERVER.md)
 - [Alter Server](./16_ALTER_SERVER.md)
+- [Drop a foreign table](./46_DROP_FOREIGN_TABLE.md)
