@@ -141,3 +141,4 @@ This command will not produce an error if `my_mongodb` already exists.
 
 - [Create Foreign Table](./27_CREATE_FOREIGN_TABLE.md)
 - [Alter Server](./16_ALTER_SERVER.md)
+- [Drop Server](./51_DROP_SERVER.md)
