@@ -4,7 +4,7 @@ The `CREATE REPOSITORY` statement is used to register a new repository, which se
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE REPOSITORY repository_name TYPE type

@@ -4,7 +4,7 @@ The `COPY FROM` statement in MonkDB facilitates the bulk import of data from fil
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 COPY table_identifier

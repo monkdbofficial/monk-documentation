@@ -4,7 +4,7 @@ The `CREATE FUNCTION` statement is used to define a new user-defined function (U
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE [OR REPLACE] FUNCTION function_name

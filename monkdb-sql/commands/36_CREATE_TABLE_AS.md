@@ -6,7 +6,7 @@ The `CREATE TABLE AS` statement is used to create a new table based on the resul
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE TABLE [ IF NOT EXISTS ] table_ident AS { ( query ) | query }

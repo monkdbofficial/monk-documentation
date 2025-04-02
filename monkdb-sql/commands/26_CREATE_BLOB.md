@@ -4,7 +4,7 @@ Creates a new table for storing Binary Large Objects (BLOBs) in monkdb.
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE BLOB TABLE table_name

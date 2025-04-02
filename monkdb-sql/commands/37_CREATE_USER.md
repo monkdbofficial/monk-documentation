@@ -4,7 +4,7 @@ The `CREATE USER` command is utilized to establish a new database user within th
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE USER username

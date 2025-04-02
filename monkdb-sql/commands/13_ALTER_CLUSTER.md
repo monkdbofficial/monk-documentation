@@ -6,7 +6,7 @@ The `ALTER CLUSTER` SQL statement in MonkDB is used to perform administrative op
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 ALTER CLUSTER

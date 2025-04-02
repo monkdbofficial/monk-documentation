@@ -4,7 +4,7 @@ A user may leverage the `COPY TO` statement to export table data to a file.
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 COPY table_ident [ PARTITION ( partition_column = value [ , ... ] ) ]

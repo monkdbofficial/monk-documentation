@@ -4,7 +4,7 @@ The `ALTER PUBLICATION` statement in MonkDB allows you to modify the list of tab
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 ALTER PUBLICATION publication_name

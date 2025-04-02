@@ -4,7 +4,7 @@ The `CLOSE` statement in MonkDB is used to close cursors that have been previous
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 CLOSE { cursor_name | ALL };

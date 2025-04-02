@@ -4,7 +4,7 @@ The `CREATE ROLE` statement is used to create a new database role in MonkDB. Rol
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE ROLE roleName

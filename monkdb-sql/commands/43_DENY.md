@@ -2,7 +2,7 @@
 
 In MonkDB, the `DENY` statement is used to restrict privileges for existing users on specific objects or the entire cluster. It serves as a management tool to enforce access control and security policies.
 
-## Synopsis
+## SQL Statement
 
 ```sql
 DENY { { DQL | DML | DDL | AL [,...] } | ALL [ PRIVILEGES ] }

@@ -4,7 +4,7 @@ The `DECLARE` command in MonkDB is used to create a cursor, which allows efficie
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 DECLARE name [ ASENSITIVE | INSENSITIVE ] [ [ NO ] SCROLL ]

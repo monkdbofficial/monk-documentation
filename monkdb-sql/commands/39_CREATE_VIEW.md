@@ -4,7 +4,7 @@ The `CREATE VIEW` statement is used to define a named query that can be referenc
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE [ OR REPLACE ] VIEW view_ident AS query

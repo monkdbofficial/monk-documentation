@@ -4,7 +4,7 @@ The `ALTER TABLE` statement in MonkDB is used to modify the structure and proper
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 ALTER [ BLOB ] TABLE { ONLY table_ident

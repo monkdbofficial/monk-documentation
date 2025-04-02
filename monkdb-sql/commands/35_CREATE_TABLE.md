@@ -4,7 +4,7 @@ The `CREATE TABLE` statement is used to define a new base table in MonkDB. This 
 
 A table can consist of regular columns, generated columns, and optional table-level constraints. It may also be partitioned and distributed across multiple shards to support large-scale data storage and parallel query processing.
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE TABLE [ IF NOT EXISTS ] table_ident ( [

@@ -1,6 +1,6 @@
 # MonkDB: `DEALLOCATE` Statement
 
-## Synopsis
+## SQL Statement
 
 ```sql
 DEALLOCATE [PREPARE] { name | ALL }

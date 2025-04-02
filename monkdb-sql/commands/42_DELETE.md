@@ -2,7 +2,7 @@
 
 The `DELETE` command in MonkDB (and SQL in general) is used to remove rows from a table based on specified conditions. 
 
-## Synopsis
+## SQL Statement
 
 ```sql
 DELETE FROM table_ident [ [AS] table_alias ] [ WHERE condition ]

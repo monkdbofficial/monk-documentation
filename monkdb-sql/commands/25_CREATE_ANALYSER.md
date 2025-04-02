@@ -4,7 +4,7 @@ Defines a new fulltext analyzer for use in text search operations. Analyzers pro
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ### Extending an Existing Analyzer
 

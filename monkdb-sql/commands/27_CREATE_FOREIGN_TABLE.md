@@ -4,7 +4,7 @@ The `CREATE FOREIGN TABLE` statement is used to define a new foreign table, whic
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE FOREIGN TABLE [ IF NOT EXISTS ] table_ident ([

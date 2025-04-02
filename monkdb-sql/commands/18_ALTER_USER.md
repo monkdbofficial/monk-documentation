@@ -4,7 +4,7 @@ The `ALTER USER` statement in MonkDB is used to modify attributes of an existing
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 ALTER USER username

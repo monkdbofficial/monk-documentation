@@ -4,7 +4,7 @@ The `CREATE SNAPSHOT` statement creates a new incremental snapshot inside a repo
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE SNAPSHOT repository_name.snapshot_name

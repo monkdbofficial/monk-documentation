@@ -4,7 +4,7 @@ The `ALTER SERVER` statement in MonkDB is used to modify the options of an exist
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 ALTER SERVER server_name OPTIONS ( option_name 'value' [, ...] )

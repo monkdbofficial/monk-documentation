@@ -4,7 +4,7 @@ The `BEGIN` statement in MonkDB is recognized for compatibility with PostgreSQL 
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 BEGIN [ WORK | TRANSACTION ] [ transaction_mode [, ...] ]

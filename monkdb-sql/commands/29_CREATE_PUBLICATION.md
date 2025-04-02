@@ -4,7 +4,7 @@ The `CREATE PUBLICATION` statement is used to define a new publication in the cu
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE PUBLICATION name

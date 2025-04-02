@@ -4,7 +4,7 @@ The `COMMIT` statement in MonkDB is accepted for compatibility with PostgreSQL c
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 COMMIT;

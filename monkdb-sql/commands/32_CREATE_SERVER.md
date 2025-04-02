@@ -4,7 +4,7 @@ The `CREATE SERVER` statement is used to define a connection to an external data
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE SERVER [IF NOT EXISTS] server_name FOREIGN DATA WRAPPER fdw_name

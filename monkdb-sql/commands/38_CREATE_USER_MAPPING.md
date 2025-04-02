@@ -4,7 +4,7 @@ Establish a user mapping for an external server.
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE USER MAPPING [ IF NOT EXISTS ] FOR { user_name | USER | CURRENT_ROLE | CURRENT_USER }

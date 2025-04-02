@@ -4,7 +4,7 @@ The `ANALYZE` command in MonkDB is used to collect statistics about the contents
 
 ---
 
-## 🧠 Syntax
+## SQL Statement
 
 ```sql
 ANALYZE;

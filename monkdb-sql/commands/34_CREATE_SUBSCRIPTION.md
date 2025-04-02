@@ -4,7 +4,7 @@ The `CREATE SUBSCRIPTION` statement is used to create a new subscription in the 
 
 ---
 
-## Synopsis
+## SQL Statement
 
 ```sql
 CREATE SUBSCRIPTION subscription_name
