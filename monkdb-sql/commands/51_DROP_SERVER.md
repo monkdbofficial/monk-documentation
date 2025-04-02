@@ -1,6 +1,6 @@
 # MonkDB: `DROP SERVER` Statement
 
-`DROP SERVER` is a DDL statement used in CrateDB to remove one or more foreign servers. Dropping a server requires AL (Admin Level) permission on the cluster level.
+`DROP SERVER` is a DDL statement used in MonkDB to remove one or more foreign servers. Dropping a server requires AL (Admin Level) permission on the cluster level.
 
 ## SQL Statement
 
