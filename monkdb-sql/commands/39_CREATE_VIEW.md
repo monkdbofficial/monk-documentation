@@ -119,7 +119,11 @@ Using explicit column names ensures consistency even if columns are added to or 
 4. **Performance Considerations:** Since views are not materialized, complex queries may impact performance when executed frequently.
 
 
+---
 
+## See Also
+
+- [Drop View](./57_DROP_VIEW.md)
 
 
 
