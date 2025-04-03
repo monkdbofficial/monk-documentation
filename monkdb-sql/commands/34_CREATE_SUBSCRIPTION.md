@@ -145,5 +145,6 @@ PUBLICATION my_publication;
 ## See Also
 
 - [Create Publication](./29_CREATE_PUBLICATION.md)
+- [Drop Subscription](./53_DROP_SUBSCRIPTION.md)
 
 
