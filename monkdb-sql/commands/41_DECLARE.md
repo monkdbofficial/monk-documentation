@@ -77,4 +77,5 @@ Ends the transaction and closes all cursors declared with `WITHOUT HOLD`.
 
 - [Begin](./20_BEGIN.md)
 - [Close](./21_CLOSE.md)
+- [Fetch](./60_FETCH.md)
 
