@@ -176,4 +176,5 @@ WITH (ignore_unavailable = true);
 ## See Also
 
 - [Create Repository](./30_CREATE_REPOSITORY.md)
+- [Drop Snapshot](./52_DROP_SNAPSHOT.md)
 
