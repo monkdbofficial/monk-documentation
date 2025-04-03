@@ -70,8 +70,8 @@ ALTER SERVER my_postgresql OPTIONS (schema_name 'new_schema', table_name 'new_ta
 
 ## 📚 See Also
 
-- [CREATE SERVER]()
-- [DROP SERVER]()
+- [CREATE SERVER](./32_CREATE_SERVER.md)
+- [DROP SERVER](./51_DROP_SERVER.md)
 
 ---
 

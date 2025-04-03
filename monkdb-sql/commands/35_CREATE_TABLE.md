@@ -529,3 +529,4 @@ The highest number of threads that can be concurrently merging on a single shard
 ## See Also
 
 - [Alter Table](./17_ALTER_TABLE.md)
+- [Drop Table](./54_DROP_TABLE.md)

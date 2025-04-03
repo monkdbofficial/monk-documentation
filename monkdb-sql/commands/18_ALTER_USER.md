@@ -21,3 +21,5 @@ ALTER USER username
 ## 📚 See Also
 
 - [ALTER ROLE](./15_ALTER_ROLE.md)
+- [CREATE ROLE](./31_CREATE_ROLE.md)
+- [DROP ROLE](./50_DROP_ROLE.md)

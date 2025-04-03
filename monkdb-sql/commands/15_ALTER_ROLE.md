@@ -118,8 +118,8 @@ ALTER ROLE alice RESET ALL;
 
 ## 📚 See Also
 
-- [CREATE ROLE]()
-- [DROP ROLE]()
+- [CREATE ROLE](./31_CREATE_ROLE.md)
+- [DROP ROLE](./50_DROP_ROLE.md)
 
 ---
 

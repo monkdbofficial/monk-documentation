@@ -67,3 +67,9 @@ And `isolation_level` options are:
 ---
 
 While MonkDB does not support transactions, understanding the role of the `BEGIN` statement can aid in managing cursor scopes effectively within the database environment.
+
+---
+
+## See Also
+
+- [Close](./21_CLOSE.md)

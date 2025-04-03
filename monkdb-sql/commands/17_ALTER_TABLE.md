@@ -113,8 +113,8 @@ ALTER TABLE partitioned_table PARTITION (region = 'us') SET (number_of_replicas 
 
 ## 📚 See Also
 
-- [CREATE TABLE]()
-- [DROP TABLE]()
+- [CREATE TABLE](./35_CREATE_TABLE.md)
+- [DROP TABLE](./54_DROP_TABLE.md)
 
 ---
 

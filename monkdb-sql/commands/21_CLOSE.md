@@ -44,3 +44,9 @@ CLOSE ALL;
 Closing a cursor that has already been closed or does not exist will result in an error. It's good practice to ensure that cursors are properly managed to avoid such errors.​
 
 MonkDB does not support transactions; therefore, cursors are managed independently of transactional control statements.
+
+---
+
+## See Also
+
+- [Begin](./20_BEGIN.md)
