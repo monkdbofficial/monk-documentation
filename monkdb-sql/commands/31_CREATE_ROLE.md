@@ -130,3 +130,4 @@ These roles can then be granted specific privileges and assigned to relevant use
 ## See Also
 
 - [Drop role](./50_DROP_ROLE.md)
+- [Grant](./61_GRANT.md)
