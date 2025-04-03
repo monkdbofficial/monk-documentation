@@ -137,3 +137,4 @@ This shows how wrapper-specific options (like jdbc.driver, jdbc.url) can be used
 - [Create User](./37_CREATE_USER.md)
 - [Alter User](./18_ALTER_USER.md)
 - [Create Server](./32_CREATE_SERVER.md)
+- [Drop User Mapping](./56_DROP_USER_MAPPING.md)
