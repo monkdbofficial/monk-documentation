@@ -53,4 +53,5 @@ GRANT admin_role TO user2;
 ## See Also
 
 - [Create a role](./31_CREATE_ROLE.md)
+- [Revoke](./67_REVOKE.md)
 
