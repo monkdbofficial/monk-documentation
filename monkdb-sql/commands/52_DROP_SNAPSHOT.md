@@ -10,7 +10,7 @@ DROP SNAPSHOT repository_name.snapshot_name
 
 ## Description
 
-- **Purpose**: The primary purpose of DROP SNAPSHOT is to remove a snapshot from a specified repository. This operation also deletes any files that are only referenced by the snapshot being dropped.
+- **Purpose**: The primary purpose of `DROP SNAPSHOT` is to remove a snapshot from a specified repository. This operation also deletes any files that are only referenced by the snapshot being dropped.
 - **Impact on Ongoing Snapshots**: If a snapshot is currently being created when the `DROP SNAPSHOT` statement is executed, the creation process is aborted. All files created during the snapshot creation process up to that point are deleted.
 
 ## Parameters
@@ -19,7 +19,7 @@ DROP SNAPSHOT repository_name.snapshot_name
 
 ## Example
 
-To drop a snapshot named my_snapshot stored in a repository named `my_repository`, you would use the following SQL command:
+To drop a snapshot named `my_snapshot` stored in a repository named `my_repository`, you would use the following SQL command
 
 ```sql
 DROP SNAPSHOT my_repository.my_snapshot;
