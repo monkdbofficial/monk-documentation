@@ -49,30 +49,43 @@ If another process updated the row, the `_version` check fails and no row is upd
 ### Example 1. Basic Example: Committing a Transaction
 
 ```sql
-BEGIN TRANSACTION;
+-- These are executed immediately and independently.
 INSERT INTO Customers (CustName, City, State, Country) 
 VALUES ('John Doe', 'New York', 'NY', 'USA');
+
 UPDATE Orders SET Product = 'Laptop' WHERE Id = 5;
-END TRANSACTION;
 ```
 
-This example begins a transaction, performs an `INSERT` and an `UPDATE`, and ends the transaction using `END TRANSACTION`. The changes are committed to the database.
+> Note: Anything related to `TRANSACTION` are accepted for compatibility, but MonkDB does not support multi-statement transactions. Each statement runs independently.
 
 ### Example 2. Conditional Commit or Rollback
 
 ```sql
-BEGIN TRANSACTION;
 INSERT INTO Customers (CustName, City, State, Country) 
 VALUES ('Jane Smith', 'Los Angeles', 'CA', 'USA');
-IF @@ROWCOUNT = 0
-    ROLLBACK TRANSACTION;
-ELSE
-    END TRANSACTION;
 ```
 
-If the `INSERT` fails (e.g., no rows affected), the transaction is rolled back. Otherwise, it ends with a commit.
+There’s no rollback, and MonkDB does not allow conditional control flow inside SQL. However, this flow must be in app level. For example,
 
-### Example 3
+```python
+# pseudo-code or real application logic-- MonkDB + psycopg2 or asyncpg
+try:
+    rows_affected = cursor.execute("""
+        INSERT INTO Customers (CustName, City, State, Country)
+        VALUES (%s, %s, %s, %s)
+    """, ('Jane Smith', 'Los Angeles', 'CA', 'USA'))
+
+    if rows_affected == 0:
+        print("No row inserted. Skipping further actions.")
+    else:
+        print("Insert successful. Proceeding...")
+        # perform next action
+except Exception as e:
+    print("Error occurred:", e)
+    # optional: log, retry, or take compensating action
+```
+
+### Example 3. Workaround to SAVEPOINT
 
 Each `DELETE`, `INSERT`, or `UPDATE` is independent and atomic.
 
@@ -90,19 +103,17 @@ If an error occurs, only that individual statement fails — there is no rollbac
 ### Nested Transactions Example
 
 ```sql
-BEGIN TRANSACTION MainTransaction;
+-- Insert a new customer
 INSERT INTO Customers (CustName, City, State, Country) 
 VALUES ('Alice Brown', 'Chicago', 'IL', 'USA');
 
-BEGIN TRANSACTION SubTransaction;
+-- Update an order independently
 UPDATE Orders SET Product = 'Tablet' WHERE Id = 3;
-END TRANSACTION; -- Commit SubTransaction
-
-END TRANSACTION; -- Commit MainTransaction
 ```
 
-Nested transactions allow specific portions of the transaction to be committed independently.
-
+- Each statement is executed independently.
+- There is no transactional context — if the `UPDATE` fails, the `INSERT` is not rolled back.
+- `BEGIN`, `END TRANSACTION`, or named transactions like `MainTransaction` or `SubTransaction` are ignored or invalid.
 
 ---
 
