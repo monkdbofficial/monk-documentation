@@ -4,7 +4,7 @@
 # MonkDB- A Unified DB Platform
 
 ![MonkDB Version 2025.3.1](https://img.shields.io/badge/MonkDB-Version%202025.3.1-blue) ![Stable](https://img.shields.io/badge/lifecycle-stable-brightgreen) ![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red)
- ![Kubernetes Supported](https://img.shields.io/badge/Deployment-Kubernetes%20Supported-blue) ![Docker Supported](https://img.shields.io/badge/Deployment-Docker%20Supported-blue) ![Last Updated](https://img.shields.io/badge/last%20updated-March%2026%202025-brightgreen)
+ ![Kubernetes Supported](https://img.shields.io/badge/Deployment-Kubernetes%20Supported-blue) ![Docker Supported](https://img.shields.io/badge/Deployment-Docker%20Supported-blue) ![Last Updated](https://img.shields.io/badge/last%20updated-April%2004%202025-brightgreen)
 
 
 ## Introduction
@@ -60,7 +60,7 @@ Users can query using `psql`/`postgresql` **SQL** statements or our query HTTP A
 To follow the instructions of MonkDB, please traverse through the below directories.
 
 - `documentation`- It has instructions on how to work with multi-model data in MonkDB. It also has simulation scripts with synthetic data. We shall be segregating this by language once other SDKs release.
-- `sql`- It has usage instructions on how to use MonkDB's SQL commands and create SQL statements. It is WIP.
+- `monkdb- sql`- It has usage instructions on how to use MonkDB's SQL commands and create SQL statements.
 - `advanced_concepts`- It has usage instructions on dealing with advanced concepts using MonkDB. It is WIP.
 
 ---
