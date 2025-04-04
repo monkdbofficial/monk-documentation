@@ -8,6 +8,8 @@ This command is extremely helpful when:
 - You're reverse engineering a table's definition for backup, documentation, or recreation in another environment.
 - You're debugging schema-related issues or reviewing how certain table-level options were configured.
 
+> It gives you the `CREATE TABLE` or `CREATE FOREIGN TABLE` statement that you would use to recreate the same table structure.
+
 ## SQL Statement
 
 ```sql
@@ -67,3 +69,10 @@ This tells you:
 - It’s clustered into 4 shards
 - Partitioned by the timestamp column
 - Replication is set to 1 replica
+
+---
+
+## See Also
+
+- [Create Table](./35_CREATE_TABLE.md)
+- [Create Foreign Table](./27_CREATE_FOREIGN_TABLE.md)
