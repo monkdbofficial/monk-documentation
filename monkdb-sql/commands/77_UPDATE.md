@@ -1,6 +1,6 @@
 # MonkDB: `UPDATE` Statement
 
-The `UPDATE` statement is used to modify existing rows in a table. You can update one or more columns, conditionally target specific rows using a WHERE clause, and even return updated values using `RETURNING`.
+The `UPDATE` statement is used to modify existing rows in a table. You can update one or more columns, conditionally target specific rows using a `WHERE` clause, and even return updated values using `RETURNING`.
 
 MonkDB supports rich expressions in both the `SET` clause and `RETURNING`, making updates powerful and flexible; especially useful when dealing with object-type columns, arrays, or complex filters.
 
