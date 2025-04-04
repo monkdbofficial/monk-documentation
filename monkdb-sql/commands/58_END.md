@@ -72,21 +72,20 @@ ELSE
 
 If the `INSERT` fails (e.g., no rows affected), the transaction is rolled back. Otherwise, it ends with a commit.
 
-### Example 3. Using SAVEPOINT and ROLLBACK
+### Example 3
+
+Each `DELETE`, `INSERT`, or `UPDATE` is independent and atomic.
 
 ```sql
-BEGIN TRANSACTION;
-SAVEPOINT SP1;
 DELETE FROM Customers WHERE ID = 1;
-
-SAVEPOINT SP2;
-DELETE FROM Customers WHERE ID = 2;
-
-ROLLBACK TO SP1; -- Undo changes after SP1
-END TRANSACTION; -- Commit remaining changes
 ```
 
-This example uses `SAVEPOINT` to create rollback points within a transaction. Changes after **SP1** are rolled back, while earlier changes are committed.
+```sql
+-- This runs immediately and cannot be rolled back
+DELETE FROM Customers WHERE ID = 2;
+```
+
+If an error occurs, only that individual statement fails — there is no rollback to a previous state.
 
 ### Nested Transactions Example
 
