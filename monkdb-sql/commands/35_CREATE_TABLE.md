@@ -482,6 +482,28 @@ Indicates the maximum allowable difference between `min_shingle_size` and `max_s
 
 The highest number of threads that can be concurrently merging on a single shard is defined by default as `Math.max(1, Math.min(4, Runtime.getRuntime().availableProcessors() / 2))`. This setting is optimal for a reliable solid-state drive (SSD). However, if your index is stored on traditional hard disk drives, it is advisable to reduce this number to `1`.
 
+
+## Additional Example for Full Coverage
+
+```sql
+CREATE TABLE IF NOT EXISTS metrics (
+    id TEXT PRIMARY KEY,
+    ts TIMESTAMP WITH TIME ZONE NOT NULL,
+    value DOUBLE PRECISION,
+    day AS date_trunc('day', ts) STORED,
+    metadata OBJECT AS (
+        device TEXT DEFAULT 'unknown'
+    )
+)
+PARTITIONED BY (day)
+CLUSTERED INTO 6 SHARDS
+WITH (
+    number_of_replicas = '1',
+    refresh_interval = '1000',
+    column_policy = 'strict'
+);
+```
+
 ## 🔐 Permissions
 
 - **Create Table**:
