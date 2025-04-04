@@ -66,11 +66,11 @@ This uses a boolean condition to filter results. You can use any SQL-compatible 
 
 ## 🆚 vs SHOW TABLES
 
-- SHOW SCHEMAS → Lists namespaces (organizational level)
-- SHOW TABLES → Lists tables within a specific schema (typically doc)
+- `SHOW SCHEMAS` → Lists namespaces (organizational level)
+- `SHOW TABLES` → Lists tables within a specific schema (typically monkdb)
 
 ---
 
 ## See Also
 
-- [Show Tables]()
+- [Show Tables](./75_SHOW_TABLES.md)
