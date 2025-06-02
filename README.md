@@ -4,7 +4,7 @@
 # MonkDB- A Unified DB Platform
 
 ![MonkDB Version 2025.3.1](https://img.shields.io/badge/MonkDB-Version%202025.3.1-blue) ![Stable](https://img.shields.io/badge/lifecycle-stable-brightgreen) ![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red)
- ![Kubernetes Supported](https://img.shields.io/badge/Deployment-Kubernetes%20Supported-blue) ![Docker Supported](https://img.shields.io/badge/Deployment-Docker%20Supported-blue) ![Last Updated](https://img.shields.io/badge/last%20updated-April%2004%202025-brightgreen)
+ ![Kubernetes Supported](https://img.shields.io/badge/Deployment-Kubernetes%20Supported-blue) ![Docker Supported](https://img.shields.io/badge/Deployment-Docker%20Supported-blue) ![Last Updated](https://img.shields.io/badge/last%20updated-June%2002%202025-brightgreen)
 
 
 ## Introduction
