@@ -6,6 +6,8 @@ MonkDB is designed for horizontally scalable, distributed SQL (OLAP) on large vo
 
 If you need strict relational integrity or procedural logic inside the database, a traditional RDBMS like PostgreSQL may be more suitable. However, please note that databases like PostgreSQL, MySQL, and the likes are OLAP databases whose purposes are different when compared with OLAP databases. 
 
+---
+
 The below section aims to list out complete set limitations of MonkDB to root out wrong expectations.
 
 - MonkDB is an OLAP database and **not** an OLTP database. It is neither a HTAP database. It is an OLAP database fronted by a PgWire interface.
@@ -155,3 +157,41 @@ These schemas are part of the SQL standard and are used for introspection unders
     - By capping the maximum length, MonkDB can pack values tightly, optimize memory usage, and apply compression schemes suitable for analytics workloads. Very large variable-length data (such as unbounded TEXT) complicates block management and can degrade performance for the entire column.
 
 > You cannot disable indexing or columnstore on partition columns. This is because partitioning relies on values being easily accessible and indexed for routing data to the right shards. This limitation is common among columnar databases, as similar restrictions exist in other systems to balance storage efficiency and query speed.
+
+- In MonkDB, aggregate functions (such as `SUM()`, `COUNT()`, `AVG()`, etc.) can only be applied to columns that have a plain index, which is the default for all primitive type columns. Additionally, using the `DISTINCT` keyword within aggregate functions (e.g., `COUNT(DISTINCT column)`) is not supported when those aggregates are used on joined tables.
+    - Applying `DISTINCT` within aggregate functions on joined tables requires the database engine to first eliminate duplicates across potentially large, joined datasets before performing the aggregation. This process is computationally expensive and complex to optimize, especially in distributed or columnar databases like MonkDB.
+    - The use of `DISTINCT` in aggregates increases the workload on the database server, as it must scan and compare large datasets to remove duplicates before aggregating. This can lead to significant performance degradation, particularly with joins where the intermediate result set can be very large.
+    - MonkDB optimizes aggregations using plain indexes on primitive columns. When joins are involved, maintaining the necessary indexing and deduplication logic for `DISTINCT` aggregates would require additional overhead and complexity, which is currently not supported.
+
+> This limitation is a trade-off to ensure query performance and maintainable complexity in MonkDB. Similar restrictions exist in other analytical databases, where supporting `DISTINCT` in aggregates on joins can lead to performance bottlenecks and is often avoided or limited in scope.
+
+- The `distance(geo_point1, geo_point2)` function in MonkDB uses the Haversine formula to compute the great-circle distance between two geographic points (latitude/longitude), returning the result in meters. While powerful and commonly used in location-based queries, it has a critical precision-related limitation that can cause confusing results, especially when used differently in a `SELECT` vs. a `WHERE` clause.
+    - The precision of `distance()` differs:
+        - When used in the `SELECT` clause, it uses a high-precision runtime Haversine calculation.
+        - When used in the `WHERE` clause, MonkDB may optimize and use the index, relying on precomputed or approximated distances (from the spatial index, often grid-based or bounding-box approximated).
+    - MonkDB is built on Lucene, which
+        - Uses spatial indexes (like geohash grids or prefix trees).
+        - These indexes are efficient for filtering, but store location data with lower precision (rounded to nearest grid cell).
+        - The `distance()` in `WHERE` uses indexed values, not raw exact coordinates.
+    - In contrast, the `distance()` in `SELECT` uses raw values and a high-precision floating-point Haversine computation.
+    - Avoid equality checks on distance, e.g., `WHERE distance(...) = 0` and Use a threshold instead.
+    - Be aware of precision mismatch between `SELECT` and `WHERE`.
+    - Use indexed distance filtering for bounding (performance), but get exact distances in `SELECT` for display or further logic.
+
+- The `intersects(geo_shape, geo_shape)` function in MonkDB is a spatial relationship function that returns `TRUE` if two geometric shapes overlap, intersect, or one contains the other. However, it has an important limitation- **You cannot use `intersects()` in the `ORDER BY` clause**.
+    - The reason for this restriction lies in how MonkDB (and its underlying engine, Apache Lucene) handles geometric shape data and spatial functions.
+        - Geometric functions are boolean filters, not sortable values
+            - The `intersects()` function returns a boolean value (`TRUE` or `FALSE`).
+            - Sorting (`ORDER BY`) implies a sortable, ordered domain (e.g., numbers, strings, dates).
+            - A boolean cannot express meaningful order for spatial relationships. There's no "less intersecting" vs. "more intersecting".
+        - Geometric shapes are complex but not scalars
+            - `geo_shape` values can be polygons, lines, multipolygons, etc.
+            - Spatial operations like `intersects()` involve topological computations (geometry libraries like JTS or Lucene's Spatial4j) which:
+                - Are not deterministic scalar outputs
+                - Are not indexed in a way that supports ranking or ordering.
+    - Even though `TRUE`/`FALSE` is technically sortable (`TRUE > FALSE`), MonkDB:
+        - Explicitly prevents using `intersects()` in `ORDER` BY because
+            - It could mislead users into thinking `intersects()` has a sortable metric like "how much" they intersect (which it does not).
+            - It avoids performance traps and semantic confusion
+
+> The geometry data type and spatial functions are designed for spatial logic, not scalar comparison.
