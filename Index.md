@@ -11,3 +11,4 @@
 #### [Chapter 8- Blobs with MonkDB](./documentation/blob/08_blob_with_monkdb.md)
 #### [Chapter 9- JSON with MonkDB](./documentation/document_json/09_doc_json_with_monkdb.md)
 #### [Chapter 10- Limitations of MonkDB](./documentation/Limitations.md)
+#### [Chapter 11- FAQs](./documentation/FAQs.md)
