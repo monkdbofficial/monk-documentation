@@ -33,19 +33,7 @@ public.ecr.aws/monkdblabs/monkdblabs/monkdb   2025.3.1   9ff1cd7f2fe1   47 hours
 Now run the docker image in daemon mode/background mode. 
 
 ```bash
-$ docker run -d \
-  --publish=4200:4200 \
-  --publish=5432:5432 \
-  --env MONKDB_HEAP_SIZE=1g \
-  --net=monkdb \
-  --name=monkdb01 \
-  9ff1cd7f2fe1 \
-  -Cnetwork.host=_site_,_local_ \
-  -Cnode.name=monkdb01 \
-  -Cauth.host_based.config.0.user=monkdb \
-  -Cauth.host_based.config.0.address=_local_ \
-  -Cauth.host_based.config.0.method=trust \
-  -Cauth.host_based.config.99.method=password
+$ docker run -d --publish=4200:4200 --publish=5432:5432 --env MONKDB_HEAP_SIZE=4g --env MONKDB_INDICES_FIELDDATA_BREAKER_LIMIT=60% --net=monkdb --name=monkdb01 9ff1cd7f2fe1 -Cnetwork.host=_site_,_local_ -Cnode.name=monkdb01 -Cauth.host_based.config.0.user=monkdb -Cauth.host_based.config.0.address=_local_ -Cauth.host_based.config.0.method=trust -Cauth.host_based.config.99.method=password
 ```
 
 + MonkDB's docker image now runs in daemon mode (in the background). 
