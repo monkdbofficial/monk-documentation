@@ -863,5 +863,5 @@ Codename:	noble
 
 ### Environment Specs
 
-+ **Sandbox environment**: We leverage `c5.2xlarge` instance family in AWS EC2 with a *100 GiB* EBS mount. 
-+ **Production environment**: We recommend `i8g` instances in AWS or equivalents in other clouds and on-premises environments for a great performance.
++ **Sandbox environment**: We leverage `m6in.2xlarge` instance family in AWS EC2 with a *100 GiB* EBS mount. 
++ **Production environment**: We recommend `m6in` instances in AWS or equivalents in other clouds and on-premises environments for a great performance.
