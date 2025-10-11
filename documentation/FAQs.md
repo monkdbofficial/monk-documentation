@@ -756,3 +756,212 @@ MonkDB is optimized for high-throughput ingestion with parallel reads, but must 
     - Keep hot data in SSD-backed primary nodes
 
 > **Technically**: OLAP engines like MonkDB use columnar storage and shared-nothing architectures, allowing horizontal scale. To support concurrent ingestion and queries, follow these: *partitioning is key*, *backpressure-aware ingestion is critical*, and *resource limits and planner-awareness must be enforced*. 
+
+## 34. How does MonkDB's shared-nothing distributed architecture work internally?
+
+MonkDB follows a **shared-nothing architecture**, meaning each node has its own CPU, memory, and disk. All nodes are identical which means any node can act as:
+
+- Coordinator node (receiving SQL requests, planning, merging results),
+- Data node (holding shards, executing query fragments),
+- Cluster manager (maintaining cluster metadata and shard assignments).
+
+Nodes communicate via the **Transport protocol** (built on Netty).
+The cluster state is distributed using **Elasticsearch-like coordination** (based on Zen Discovery / Raft-like mechanisms).
+This symmetry ensures no single point of failure and linear horizontal scalability.
+
+## 35. What are the details of MonkDB’s data partitioning and shard distribution mechanisms?
+
+Tables can be:
+
+- **Unpartitioned**— fixed number of shards (e.g., `CLUSTERED INTO 8 SHARDS`), or
+- **Partitioned**— shards grouped by partition keys (e.g., `PARTITIONED BY (date_trunc('day', ts))`).
+
+Each partition = 1+ shards.
+Shard placement and replication are managed by the cluster state service, ensuring balanced distribution across nodes.
+When nodes join/leave, MonkDB automatically rebalances shards for even data and load distribution.
+
+## 36. How does MonkDB achieve data replication, consistency, and fault tolerance?
+
+- Each shard has 1 primary and n replicas.
+- Writes go to the primary shard, which forwards to replicas.
+- Acknowledgement is returned to the client once all replicas have written successfully (or quorum is reached).
+- Replication ensures durability and automatic recovery if a node fails — replicas are promoted to primaries during failover.
+
+## 37. Can you explain MonkDB’s underlying storage engine and its integration with Lucene?
+
+MonkDB uses **Apache Lucene** as its storage layer.
+Each shard = a Lucene index, containing:
+
+- **Inverted indexes** for full-text and keyword search,
+- **BKD trees** for numeric, and geo,
+- **Doc values** for columnar analytics.
+- **HNSW** for managing vector data. 
+
+MonkDB wraps Lucene with SQL semantics, allowing you to query all data types using familiar SQL syntax, including aggregations and joins.
+
+## 38. How are columnar storage and row-based document storage combined in MonkDB?
+
+MonkDB employs a hybrid HTAP architecture, combining row-based document storage for fast ingest and immediate updates with a columnar engine for high-performance analytical queries. However, it does not support traditional multi-statement transactional controls like `BEGIN`, `COMMIT`, or `ROLLBACK`. These statements are accepted for client compatibility but silently ignored, with all operations auto-committed and visible immediately.
+
+### Storage & Query Architecture
+
+- Incoming records (JSON, sensor data, etc.) are first written into a row-oriented document store, providing atomic operations at the document level and low-latency data ingestion.
+- In the background, data is compacted and vectorized into columnar structures (doc-values, vectorized blocks) for read-optimized analytical workloads, such as aggregations and scans.
+- MonkDB's query planner directs transactional-style lookups to its row layer, and analytical workloads to the columnar layer.
+
+### Transaction Limitations
+
+- MonkDB does not offer ACID transactions: every write is auto-committed, and there are no mechanisms for multi-statement atomicity or rollback.
+- Transaction-related SQL statements are accepted only for compatibility and have no real effect.
+- Consistency is managed at the row/document level using atomic operations and version numbers, with eventual consistency across shards in distributed scenarios.
+
+MonkDB’s HTAP approach enables efficient OLTP+OLAP querying on the same data, but does not provide real transaction semantics—data operations are atomic at the row/document level and are finalized with every statement.
+
+## 39. How does MonkDB optimize distributed SQL query execution across multiple nodes?
+
+Queries are decomposed into a **logical plan → physical plan** via the **SQL Handler** and **Job Execution Service (JES)**.
+The query executes in phases:
+
+- **Collect phase** — data scanned locally on each shard.
+- **Merge phase** — partial results streamed to coordinator.
+- **Fetch phase (optional)** — document-level data retrieval.
+
+Execution is fully parallelized, minimizing data movement.
+Pushdown predicates and early aggregation reduce network overhead.
+
+## 40. What are MonkDB’s advanced indexing techniques, including full-text, geo, and vector search?
+
+- **Full-text**: Uses Lucene analyzers for tokenization and relevance scoring (`MATCH` operator).
+- **Geo**: Supports `GEO_POINT` and `GEO_SHAPE` types with spatial indexing via BKD trees.
+- **Vector**: Stores embeddings in `FLOAT_VECTOR(N)` columns and queries via `knn_match` for semantic similarity (HNSW index).
+
+All are first-class citizens in the SQL layer meaning you can combine them in `SELECT`, `JOIN`, and `WHERE` clauses.
+
+## 41. How does MonkDB handle concurrent writes and real-time data ingestion at scale?
+
+Writes land in:
+
+- An **in-memory buffer** (per shard),
+- A **transaction log (translog)** for durability.
+
+Data becomes searchable after each **refresh interval** (default 1 second).
+Lucene’s segment-based model allows high-concurrency writes, and MonkDB’s distributed shard architecture parallelizes ingestion across nodes.
+Backpressure mechanisms manage memory and flush frequency to maintain stability.
+
+## 42. What is the query planning and physical execution flow inside MonkDB’s engine?
+
+- **SQL Handler** parses the query and generates a logical plan.
+- **Analyzer** validates schema and optimizes joins, filters, and projections.
+- **Planner** generates a distributed physical plan — defines where each operation runs.
+- **Job Execution Service (JES)** schedules execution tasks across nodes.
+- **Coordinator** node merges results and returns them to the client.
+
+Query plans can be inspected with `EXPLAIN`.
+
+## 43. How does MonkDB support schema evolution and dynamic schema updates without downtime?
+
+MonkDB supports dynamic schemas:
+
+- New fields automatically added to `OBJECT` columns or tables with `dynamic = true`.
+- Each new field is automatically indexed and becomes queryable.
+- Schema updates propagate cluster-wide via the cluster state service. No restart required.
+
+## 44. How can custom user-defined functions (UDFs) be created and used in MonkDB?
+
+MonkDB allows JavaScript-based UDFs:
+
+```sql
+CREATE FUNCTION my_add(a INTEGER, b INTEGER)
+RETURNS INTEGER
+LANGUAGE JAVASCRIPT AS 'function(a, b) { return a + b; }';
+```
+
+UDFs run in a sandboxed engine within each node, enabling local execution for performance.
+
+## 45. What monitoring and diagnostics tools are recommended for MonkDB clusters?
+
+- **System tables**– sys.nodes, sys.jobs, sys.shards, sys.metrics.
+- **Prometheus + Grafana**– MonkDB exposes metrics endpoint (_prometheus).
+- **Log files**– detailed traces under log/monkdb.log for query and GC diagnostics.
+
+## 46. Can MonkDB integrate with AI and machine learning workflows, and how?
+
+Yes — via vector storage and external orchestration:
+
+- Store model embeddings in `FLOAT_VECTOR`.
+- Use `knn_match` for semantic search or recommendation tasks, and `vector_similarity` for similarity searches across vector data.
+- Integrate with LangChain, HuggingFace, or MonkDB MCP and pipelines through the PgWire protocol or HTTP interface.
+- Combine structured filters + full text search + vector similarity in one SQL query.
+
+## 47. How does MonkDB manage memory and disk storage to optimize performance?
+
+- **Heap memory** used for query planning, caching, aggregations.
+- **Off-heap memory** managed by Lucene for segment caching.
+- **Circuit breakers** prevent OOM by monitoring usage.
+- **Segment** merging and flush policies optimize disk I/O.
+- **Doc values** allow columnar scans directly from disk with minimal heap load.
+
+## 48. What are the best deployment patterns for MonkDB in cloud, hybrid, and edge environments?
+
+- **Cloud**: Containerized (Kubernetes or Docker) deployments scale elastically.
+- **Hybrid**: Edge nodes ingest locally → replicate/aggregate to core cluster.
+- **Edge**: ARM64 builds enable deployment on devices (e.g., Raspberry Pi, Jetson).
+
+Use Kubernetes Operators for managed orchestration.
+
+## 49. How to perform backup, restore, and disaster recovery in MonkDB?
+
+Use Snapshots (similar to Elasticsearch):
+
+```sql
+CREATE REPOSITORY repo1 TYPE fs WITH (location='/mnt/backups');
+CREATE SNAPSHOT repo1.snapshot1 ALL;
+```
+
+- Supports **S3**, **Azure**, **GCS**, and **local FS** backends.
+- Snapshots are incremental — only changed segments are copied.
+- Restore from snapshot using `RESTORE SNAPSHOT`.
+
+## 50. What security model does MonkDB implement for multi-tenant environments?
+
+- **Role-based access control (RBAC)** – users, roles, and privileges.
+- **TLS/SSL** for client and inter-node communication.
+- **Authentication**: password-based, LDAP, JWT, or PKI.
+- **Row-level security** can be implemented via views or filters per tenant.
+
+## 51. How to tune MonkDB for large-scale time-series workloads with rapid ingestion and querying?
+
+- Partition tables by time (daily/hourly).
+- Use `TIMESTAMP + CLUSTERED BY` key for routing.
+- Tune:
+    - `number_of_replicas`
+    - `refresh_interval`
+    - `translog.flush_threshold_size`
+- Periodically drop or roll over old partitions.
+- Use doc values for aggregations, avoid over-indexing.
+
+## 52. How does MonkDB enable transactional atomicity in a distributed environment?
+
+- MonkDB provides per-shard atomicity — writes to a single shard are atomic.
+- Cluster-level atomicity (across shards) follows eventual consistency.
+- Transaction boundaries are managed via internal journaling and replication acknowledgements.
+
+## 53. What are the internal mechanisms for cluster state management and leader election?
+
+- Master (cluster manager) election handled by Zen Discovery (Raft-like consensus).
+- Master maintains cluster metadata — nodes, shards, mappings.
+- Updates are versioned and broadcast to all nodes.
+- If master fails, a new one is elected via quorum voting.
+
+## 54. How does MonkDB handle load balancing and query routing across nodes?
+
+- Any node can act as a coordinator, providing natural load balancing.
+- External load balancers (HAProxy, Nginx, Kubernetes service) can distribute client connections.
+- Routing decisions for data access are based on cluster state metadata (which node owns which shards).
+
+## 55. How to perform logical replication and data synchronization between MonkDB clusters?
+
+Currently MonkDB supports:
+
+- Snapshots + incremental restores for batch replication.
+- Log shipping or CDC can be achieved via integration with Kafka connectors or MonkDB pipelines.
