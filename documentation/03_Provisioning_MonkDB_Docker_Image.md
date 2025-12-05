@@ -16,6 +16,18 @@ $ docker pull public.ecr.aws/monkdblabs/monkdblabs/monkdb:2025.3.1
 The current stable & latest version is `2025.3.1`. However, please update this version in the above 
 command whenever we release a new image.
 
+If you are facing issues in downloading image from this repo, please do the below. 
+
+```bash
+$ wget https://workdrive.zohoexternal.in/external/74d6f912e5434503e6606bebc0812c9bb8a27ea558af5410990e55c3a38d0cdb
+```
+
+Once you download the image, please run the below command. 
+
+```bash
+$ docker load -i <monkdb_tar_image>
+```
+
 Once you successfully pull our docker image, ensure its presence by running the below command.
 
 ```bash
