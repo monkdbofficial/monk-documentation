@@ -297,6 +297,9 @@ auth:
 # Specify the path to the directory where blob data for this node will be stored.
 #blobs.path: blobs
 
+# Allow FDW access to local filesystem for non-superusers
+# fdw.allow_local: true
+
 # See also: path.repo (further down)
 
 ################################### Memory ###################################
