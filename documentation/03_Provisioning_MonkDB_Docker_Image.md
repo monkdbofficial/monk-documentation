@@ -34,18 +34,19 @@ Once you successfully pull our docker image, ensure its presence by running the 
 $ docker images
 ```
 
-It should give an output something like below in AMD64 system.
+It should give an output something like below in `AMD64` system.
 
 ```
 IMAGE                                              ID             DISK USAGE   CONTENT SIZE   EXTRA
 rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-amd64   508f75ddee28        878MB             0B
 ```
 
-It should give an output something like below in ARM64 system.
+It should give an output something like below in `ARM64` system.
 
+```
 IMAGE                                              ID             DISK USAGE   CONTENT SIZE   EXTRA
 rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-arm64   508f75ddee28        878MB             0B
-
+```
 
 Now run the docker image in daemon mode/background mode. The below is a sample run command. You may tweak the args and their values listed in monkdb's YML file (shown below) to suit your requirements. 
 
