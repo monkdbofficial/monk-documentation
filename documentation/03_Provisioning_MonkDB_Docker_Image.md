@@ -7,26 +7,26 @@ Create a dedicated network using the below command to manage persistence.
 $ docker network create monkdb
 ```
 
-Pull our docker image hosted in AWS ECR public repository.
+Pull our docker image hosted using the below commands
+
+### ARM64
+
+If your system is based on ARM64 chipset processor, then please run the below command.
 
 ```bash
-$ docker pull public.ecr.aws/monkdblabs/monkdblabs/monkdb:2025.3.1
+$ docker pull rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-arm64
+```
+
+### AMD64
+
+If your system is based on AMD64 chipset processor, then please run the below command.
+
+```bash
+$ docker pull rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-amd64
 ```
 
 The current stable & latest version is `2025.3.1`. However, please update this version in the above 
 command whenever we release a new image.
-
-If you are facing issues in downloading image from this repo, please do the below. 
-
-```bash
-$ wget https://workdrive.zohoexternal.in/external/74d6f912e5434503e6606bebc0812c9bb8a27ea558af5410990e55c3a38d0cdb
-```
-
-Once you download the image, please run the below command. 
-
-```bash
-$ docker load -i <monkdb_tar_image>
-```
 
 Once you successfully pull our docker image, ensure its presence by running the below command.
 
@@ -34,18 +34,23 @@ Once you successfully pull our docker image, ensure its presence by running the 
 $ docker images
 ```
 
-It should give an output something like below. 
+It should give an output something like below in AMD64 system.
 
-```bash
-$ docker images
-REPOSITORY                                    TAG        IMAGE ID       CREATED        SIZE
-public.ecr.aws/monkdblabs/monkdblabs/monkdb   2025.3.1   9ff1cd7f2fe1   47 hours ago   907MB
+```
+IMAGE                                              ID             DISK USAGE   CONTENT SIZE   EXTRA
+rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-amd64   508f75ddee28        878MB             0B
 ```
 
-Now run the docker image in daemon mode/background mode. 
+It should give an output something like below in ARM64 system.
+
+IMAGE                                              ID             DISK USAGE   CONTENT SIZE   EXTRA
+rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-arm64   508f75ddee28        878MB             0B
+
+
+Now run the docker image in daemon mode/background mode. The below is a sample run command. You may tweak the args and their values listed in monkdb's YML file (shown below) to suit your requirements. 
 
 ```bash
-$ docker run -d --publish=4200:4200 --publish=5432:5432 --env MONKDB_HEAP_SIZE=4g --env MONKDB_INDICES_FIELDDATA_BREAKER_LIMIT=60% --net=monkdb --name=monkdb01 9ff1cd7f2fe1 -Cnetwork.host=_site_,_local_ -Cnode.name=monkdb01 -Cauth.host_based.config.0.user=monkdb -Cauth.host_based.config.0.address=_local_ -Cauth.host_based.config.0.method=trust -Cauth.host_based.config.99.method=password
+$ docker run -d --publish=4200:4200 --publish=5432:5432 --env MONKDB_HEAP_SIZE=1g --env MONKDB_INDICES_FIELDDATA_BREAKER_LIMIT=60% --net=monkdb --name=monkdb02 rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-arm64 -Cnetwork.host=_site_,_local_ -Cnode.name=monkdb01 -Cauth.host_based.config.0.user=monkdb -Cauth.host_based.config.0.address=_local_ -Cauth.host_based.config.0.method=trust -Cauth.host_based.config.99.method=password
 ```
 
 + MonkDB's docker image now runs in daemon mode (in the background). 
@@ -846,23 +851,6 @@ GRANT ALL PRIVILEGES TO testuser;
 ```
 
 ---
-
-## Environment Related Information
-
-We have executed all the commands listed in this document in Ubuntu with the below specifications.
-
-```bash
-$ uname -m
-x86_64
-```
-
-```bash
-$ lsb_release --all
-Distributor ID:	Ubuntu
-Description:	Ubuntu 24.04.2 LTS
-Release:	24.04
-Codename:	noble
-```
 
 ### Environment Specs
 
