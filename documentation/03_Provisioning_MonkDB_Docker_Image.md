@@ -812,6 +812,39 @@ auth:
 # with existing PostgreSQL-based workflows and ecosystems.
 #psql.enabled: true
 #psql.port: 5432
+
+# -------------------------
+# Gremlin Policy (Hard Caps)
+# -------------------------
+# gremlin.http.max_depth: 6
+# gremlin.http.max_rows: 500
+# gremlin.http.timeout_ms: 5000
+# gremlin.http.deny_unbounded_repeat: true
+
+# Power-user override example (trusted internal service account)
+# gremlin.http.user.graph_service.max_depth: 8
+# gremlin.http.user.graph_service.max_rows: 1500
+# gremlin.http.user.graph_service.timeout_ms: 8000
+# gremlin.http.user.graph_service.deny_unbounded_repeat: true
+
+# ---------------------------------
+# Admission Control (Fanout Defense)
+# ---------------------------------
+# gremlin.http.admission.assumed_fanout: 12
+# gremlin.http.admission.max_estimated_rows: 200000
+# gremlin.http.admission.max_estimated_work: 800000
+
+# ----------------------------------------
+# Alert Thresholds (Operational SLO Signals)
+# ----------------------------------------
+# gremlin.http.alerts.policy_rejected_ratio_threshold: 0.10
+# gremlin.http.alerts.policy_rejected_min_requests: 50
+
+# gremlin.http.alerts.guardrail_rejected_ratio_threshold: 0.03
+# gremlin.http.alerts.guardrail_rejected_min_requests: 50
+
+# gremlin.http.alerts.parse_cache_miss_ratio_threshold: 0.60
+# gremlin.http.alerts.parse_cache_miss_min_samples: 100
 ```
 
 Once the above docker run command is executed, please ensure that the spawned container is in `running` state. Execute the below command to check the status.
