@@ -816,34 +816,49 @@ auth:
 # -------------------------
 # Gremlin Policy (Hard Caps)
 # -------------------------
+# Maximum traversal depth allowed (for bounded repeat). Deeper requests are rejected.
 # gremlin.http.max_depth: 6
+# Hard upper cap on returned rows per Gremlin request.
 # gremlin.http.max_rows: 500
+# Maximum execution timeout (5 seconds) allowed for Gremlin requests.
 # gremlin.http.timeout_ms: 5000
+# Blocks repeat(...) without .times(n).
 # gremlin.http.deny_unbounded_repeat: true
 
 # Power-user override example (trusted internal service account)
+# Per-user override: graph_service can use depth up to 8.
 # gremlin.http.user.graph_service.max_depth: 8
+# Per-user override: graph_service can return up to 1500 rows.
 # gremlin.http.user.graph_service.max_rows: 1500
+# Per-user override: graph_service can run up to 8 seconds.
 # gremlin.http.user.graph_service.timeout_ms: 8000
+# Keeps unbounded repeat blocked for that user too.
 # gremlin.http.user.graph_service.deny_unbounded_repeat: true
 
 # ---------------------------------
 # Admission Control (Fanout Defense)
 # ---------------------------------
+# Planner assumption for neighbor expansion factor used in cost estimation.
 # gremlin.http.admission.assumed_fanout: 12
+# Rejects queries if estimated produced rows exceed this.
 # gremlin.http.admission.max_estimated_rows: 200000
+# Rejects queries if estimated total work exceeds this.
 # gremlin.http.admission.max_estimated_work: 800000
 
 # ----------------------------------------
 # Alert Thresholds (Operational SLO Signals)
 # ----------------------------------------
+# Alert if policy-rejected requests ratio goes above 10%.
 # gremlin.http.alerts.policy_rejected_ratio_threshold: 0.10
+# Don’t evaluate that ratio alert until at least 50 requests observed.
 # gremlin.http.alerts.policy_rejected_min_requests: 50
-
+# Alert if guardrail-rejected requests ratio goes above 3%
 # gremlin.http.alerts.guardrail_rejected_ratio_threshold: 0.03
+# Don’t evaluate guardrail ratio until at least 50 requests.
 # gremlin.http.alerts.guardrail_rejected_min_requests: 50
-
+# Alert if parse-cache miss ratio exceeds 60%
 # gremlin.http.alerts.parse_cache_miss_ratio_threshold: 0.60
+# Don’t evaluate cache miss ratio until at least 100 cache samples (hits+misses).
 # gremlin.http.alerts.parse_cache_miss_min_samples: 100
 ```
 
