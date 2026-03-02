@@ -860,6 +860,23 @@ auth:
 # gremlin.http.alerts.parse_cache_miss_ratio_threshold: 0.60
 # Don’t evaluate cache miss ratio until at least 100 cache samples (hits+misses).
 # gremlin.http.alerts.parse_cache_miss_min_samples: 100
+
+# ----------------------------------------
+# Audit Sizing
+# ----------------------------------------
+#avoids query latency hit
+#audit.sink.mode: async
+#absorbs bursts
+#audit.sink.queue_size: 200000
+#reduces sink overhead
+#audit.sink.batch_size: 1024
+#less frequent writes, lower overhead.
+#audit.sink.flush_interval_ms: 1000
+#durability across restarts.
+#audit.sink.spool.enabled: true
+#never block queries; drop if overloaded.
+#audit.sink.drop_on_full: true
+
 ```
 
 Once the above docker run command is executed, please ensure that the spawned container is in `running` state. Execute the below command to check the status.
