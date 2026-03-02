@@ -919,6 +919,7 @@ auth:
 # audit.sink.index.partition_by_day: true
 
 # Archive partitions to snapshot repository
+# if doc.policy_audit_events already exists as non‑partitioned, you must drop and recreate it (or change the name) to enable partition_by_day.
 # audit.archive.enabled: true
 # fs or plugin-provided s3/azure/gcs repo
 # audit.archive.repository: <your_repo_name>
