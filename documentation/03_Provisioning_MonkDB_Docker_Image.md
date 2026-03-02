@@ -864,18 +864,53 @@ auth:
 # ----------------------------------------
 # Audit Sizing
 # ----------------------------------------
-#avoids query latency hit
-#audit.sink.mode: async
-#absorbs bursts
-#audit.sink.queue_size: 200000
-#reduces sink overhead
-#audit.sink.batch_size: 1024
-#less frequent writes, lower overhead.
-#audit.sink.flush_interval_ms: 1000
-#durability across restarts.
-#audit.sink.spool.enabled: true
-#never block queries; drop if overloaded.
-#audit.sink.drop_on_full: true
+# Enables policy audit capture
+# audit.enabled: true
+# Async sink to avoid query latency
+# audit.sink.mode: async
+# Buffer size for bursts (events)
+# audit.sink.queue_size: 200000
+# Batch size per write to reduce overhead
+# audit.sink.batch_size: 1024
+# Flush cadence (ms) for async worker
+# audit.sink.flush_interval_ms: 1000
+# Persist async backlog locally across restarts
+# audit.sink.spool.enabled: true
+# Never block queries; drop if queue is full
+# audit.sink.drop_on_full: true
+# 1.0 = keep all audits (lower to sample)
+# audit.sink.sample_rate: 1.0
+# Keep latest N in governance.policy_audit (cluster state)
+# audit.sink.max_records: 5000
+
+# ----------------------------------------
+# Lineage (job + edge lineage)
+# ----------------------------------------
+# Enables lineage capture
+# lineage.enabled: true
+# Async sink to avoid query latency
+# lineage.sink.mode: async
+# Buffer size for bursts
+# lineage.sink.queue_size: 200000
+# Persist async backlog locally across restarts
+# lineage.sink.spool.enabled: true
+# Never block queries; drop if queue is full
+# lineage.sink.drop_on_full: true
+
+# --------------------------------------------
+# Full durable audit history (replicated index)
+# --------------------------------------------
+# Enable this if you want all audit events stored cross‑node, not just latest N.
+# Writes all audits into replicated doc table
+# audit.sink.index.enabled: true
+# Table name (doc.policy_audit_events)
+# audit.sink.index.name: policy_audit_events
+# Shard count for the audit index
+# audit.sink.index.shards: 1
+# Auto‑expand replicas (durable across nodes)
+# audit.sink.index.replicas: 0-1
+# Lower refresh cost for heavy ingest
+# audit.sink.index.refresh_interval: 30s
 
 ```
 
