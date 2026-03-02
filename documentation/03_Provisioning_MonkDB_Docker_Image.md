@@ -912,6 +912,26 @@ auth:
 # Lower refresh cost for heavy ingest
 # audit.sink.index.refresh_interval: 30s
 
+# --------------------------------------------
+# Audit hot/cold (partition + archive snapshots)
+# --------------------------------------------
+# Partition audit index by day (required for archive)
+# audit.sink.index.partition_by_day: true
+
+# Archive partitions to snapshot repository
+# audit.archive.enabled: true
+# fs or plugin-provided s3/azure/gcs repo
+# audit.archive.repository: <your_repo_name>
+# how often to run archive
+#  audit.archive.interval: 1h
+# keep this much locally
+#  audit.archive.max_age: 7d
+# cap work per run
+# audit.archive.max_partitions_per_run: 50
+# audit.archive.snapshot_prefix: policy_audit_archive
+# audit.archive.delete_after_snapshot: true
+# audit.archive.wait_for_completion: true
+
 ```
 
 Once the above docker run command is executed, please ensure that the spawned container is in `running` state. Execute the below command to check the status.
