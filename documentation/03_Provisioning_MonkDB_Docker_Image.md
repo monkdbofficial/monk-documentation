@@ -862,76 +862,41 @@ auth:
 # gremlin.http.alerts.parse_cache_miss_min_samples: 100
 
 # ----------------------------------------
-# Audit Sizing
-# ----------------------------------------
-# Enables policy audit capture
-# audit.enabled: true
-# Async sink to avoid query latency
-# audit.sink.mode: async
-# Buffer size for bursts (events)
-# audit.sink.queue_size: 200000
-# Batch size per write to reduce overhead
-# audit.sink.batch_size: 1024
-# Flush cadence (ms) for async worker
-# audit.sink.flush_interval_ms: 1000
-# Persist async backlog locally across restarts
-# audit.sink.spool.enabled: true
-# Never block queries; drop if queue is full
-# audit.sink.drop_on_full: true
-# 1.0 = keep all audits (lower to sample)
-# audit.sink.sample_rate: 1.0
-# Keep latest N in governance.policy_audit (cluster state)
-# audit.sink.max_records: 5000
+  # Audit (policy decisions)
+  # ----------------------------------------
+  # audit.enabled: true
+  # audit.sink.mode: async
+  # audit.sink.queue_size: 200000
+  # audit.sink.batch_size: 1024
+  # audit.sink.flush_interval_ms: 1000
+  # audit.sink.spool.enabled: true
+  # audit.sink.drop_on_full: true
+  # audit.sink.sample_rate: 1.0
 
-# ----------------------------------------
-# Lineage (job + edge lineage)
-# ----------------------------------------
-# Enables lineage capture
-# lineage.enabled: true
-# Async sink to avoid query latency
-# lineage.sink.mode: async
-# Buffer size for bursts
-# lineage.sink.queue_size: 200000
-# Persist async backlog locally across restarts
-# lineage.sink.spool.enabled: true
-# Never block queries; drop if queue is full
-# lineage.sink.drop_on_full: true
+  # Durable audit index (replicated)
+  # audit.sink.index.enabled: true
+  # audit.sink.index.name: policy_audit_events
+  # audit.sink.index.shards: 1
+  # audit.sink.index.replicas: "0-1"
+  # audit.sink.index.refresh_interval: 30s
+  # audit.sink.index.partition_by_day: true
 
-# --------------------------------------------
-# Full durable audit history (replicated index)
-# --------------------------------------------
-# Enable this if you want all audit events stored cross‑node, not just latest N.
-# Writes all audits into replicated doc table
-# audit.sink.index.enabled: true
-# Table name (doc.policy_audit_events)
-# audit.sink.index.name: policy_audit_events
-# Shard count for the audit index
-# audit.sink.index.shards: 1
-# Auto‑expand replicas (durable across nodes)
-# audit.sink.index.replicas: 0-1
-# Lower refresh cost for heavy ingest
-# audit.sink.index.refresh_interval: 30s
+  # Archive (hot/cold)
+  # audit.archive.enabled: true
+  # audit.archive.repository: audit_repo   # CREATE REPOSITORY ... name
+  # audit.archive.interval: 1h
+  # audit.archive.max_age: 7d
+  # audit.archive.max_partitions_per_run: 50
+  # audit.archive.snapshot_prefix: policy_audit_archive
+  # audit.archive.delete_after_snapshot: true
+  # audit.archive.wait_for_completion: true
 
-# --------------------------------------------
-# Audit hot/cold (partition + archive snapshots)
-# --------------------------------------------
-# Partition audit index by day (required for archive)
-# audit.sink.index.partition_by_day: true
-
-# Archive partitions to snapshot repository
-# if doc.policy_audit_events already exists as non‑partitioned, you must drop and recreate it (or change the name) to enable partition_by_day.
-# audit.archive.enabled: true
-# fs or plugin-provided s3/azure/gcs repo
-# audit.archive.repository: <your_repo_name>
-# how often to run archive
-#  audit.archive.interval: 1h
-# keep this much locally
-#  audit.archive.max_age: 7d
-# cap work per run
-# audit.archive.max_partitions_per_run: 50
-# audit.archive.snapshot_prefix: policy_audit_archive
-# audit.archive.delete_after_snapshot: true
-# audit.archive.wait_for_completion: true
+  # ----------------------------------------
+  # Lineage
+  # ----------------------------------------
+  # lineage.enabled: true
+  # lineage.sink.mode: async
+  # lineage.sink.queue_size: 200000
 
 ```
 
