@@ -896,7 +896,17 @@ auth:
   # ----------------------------------------
   # lineage.enabled: true
   # lineage.sink.mode: async
-  # lineage.sink.queue_size: 200000
+  # lineage.sink.queue_size: 16384
+  # lineage.durability.mode: durable
+  # lineage.retention: 24h
+
+  # Optional: lineage projection tables
+  # lineage.sink.index.enabled: true
+  # lineage.sink.index.jobs_table: lineage_jobs_store
+  # lineage.sink.index.edges_table: lineage_edges_store
+  # lineage.sink.index.shards: 1
+  # lineage.sink.index.replicas: "0-1"
+  # lineage.sink.index.partition_by: day
 
 ```
 
