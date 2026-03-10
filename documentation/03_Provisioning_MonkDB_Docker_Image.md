@@ -9,23 +9,23 @@ $ docker network create monkdb
 
 Pull our docker image hosted using the below commands
 
-### ARM64
-
-If your system is based on ARM64 chipset processor, then please run the below command.
-
-```bash
-$ docker pull rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-arm64
-```
-
 ### AMD64
 
 If your system is based on AMD64 chipset processor, then please run the below command.
 
 ```bash
-$ docker pull rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-amd64
+$ docker pull rg.fr-par.scw.cloud/monkdb/monkdb:26.3.1-amd64
 ```
 
-The current stable & latest version is `2025.3.1`. However, please update this version in the above 
+### ARM64
+
+If your system is based on ARM64 chipset processor, then please run the below command.
+
+```bash
+$ docker pull rg.fr-par.scw.cloud/monkdb/monkdb:26.3.1-arm64
+```
+
+The current stable & latest version is `26.3.1`. However, please update this version in the above 
 command whenever we release a new image.
 
 Once you successfully pull our docker image, ensure its presence by running the below command.
@@ -38,14 +38,14 @@ It should give an output something like below in `AMD64` system.
 
 ```
 IMAGE                                              ID             DISK USAGE   CONTENT SIZE   EXTRA
-rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-amd64   508f75ddee28        878MB             0B
+rg.fr-par.scw.cloud/monkdb/monkdb:26.3.1-amd64   508f75ddee28        878MB             0B
 ```
 
 It should give an output something like below in `ARM64` system.
 
 ```
 IMAGE                                              ID             DISK USAGE   CONTENT SIZE   EXTRA
-rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-arm64   508f75ddee28        878MB             0B
+rg.fr-par.scw.cloud/monkdb/monkdb:26.3.1-arm64   508f75ddee28        878MB             0B
 ```
 
 Now run the docker image in daemon mode/background mode. The below is a sample run command. You may tweak the args and their values listed in monkdb's YML file (shown below) to suit your requirements. 
