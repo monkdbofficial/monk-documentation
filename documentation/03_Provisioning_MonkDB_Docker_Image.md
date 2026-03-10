@@ -51,7 +51,7 @@ rg.fr-par.scw.cloud/monkdb/monkdb:26.3.1-arm64   508f75ddee28        878MB      
 Now run the docker image in daemon mode/background mode. The below is a sample run command. You may tweak the args and their values listed in monkdb's YML file (shown below) to suit your requirements. 
 
 ```bash
-$ docker run -d --publish=4200:4200 --publish=5432:5432 --env MONKDB_HEAP_SIZE=1g --env MONKDB_INDICES_FIELDDATA_BREAKER_LIMIT=60% --net=monkdb --name=monkdb02 rg.fr-par.scw.cloud/monkdb/monkdb:2025.3.1-arm64 -Cnetwork.host=_site_,_local_ -Cnode.name=monkdb01 -Cauth.host_based.config.0.user=monkdb -Cauth.host_based.config.0.address=_local_ -Cauth.host_based.config.0.method=trust -Cauth.host_based.config.99.method=password
+$ docker run -d --publish=4200:4200 --publish=5432:5432 --env MONKDB_HEAP_SIZE=1g --env MONKDB_INDICES_FIELDDATA_BREAKER_LIMIT=60% --net=monkdb --name=monkdb02 rg.fr-par.scw.cloud/monkdb/monkdb:26.3.1-amd64 -Cnetwork.host=_site_,_local_ -Cnode.name=monkdb01 -Cauth.host_based.config.0.user=monkdb -Cauth.host_based.config.0.address=_local_ -Cauth.host_based.config.0.method=trust -Cauth.host_based.config.99.method=password
 ```
 
 + MonkDB's docker image now runs in daemon mode (in the background). 
